@@ -10,6 +10,24 @@ use Doctrine\Persistence\ObjectManager;
 
 class ArtistFixtures extends Fixture implements DependentFixtureInterface
 {
+
+    public const ARTIST_REFERENCES = [
+
+        "Beyoncé",
+        "Ne-Yo",
+        "Usher",
+        "Chris Brown",
+        "Mario",
+        "Ronisia",
+        "Lewis Capaldi",
+        "Ed Sheeran",
+        "Rihanna",
+        "Sam Smith",
+        "Jp Cooper",
+        "Bob Marley"
+
+    ];
+
     public function load(ObjectManager $manager): void
     {
 
@@ -88,7 +106,7 @@ class ArtistFixtures extends Fixture implements DependentFixtureInterface
             ],
         ];
 
-        foreach($artists as $one_artist){
+        foreach($artists as $index => $one_artist){
 
             $artist = new Artist();
             $artist->setNickname($one_artist["nickname"]);
@@ -102,6 +120,8 @@ class ArtistFixtures extends Fixture implements DependentFixtureInterface
             }
 
             $manager->persist($artist);
+
+            $this->addReference(self::ARTIST_REFERENCES[$index], $artist);
 
         }
 
