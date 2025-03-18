@@ -24,7 +24,7 @@ class Hall
     #[ORM\Column]
     private ?int $capacity = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 355)]
     private ?string $description = null;
 
     /**
