@@ -18,6 +18,8 @@ class AppFixtures extends Fixture implements DependentFixtureInterface
         return [
             CategoryFixtures::class,
             ArtistFixtures::class,
+            HallFixtures::class,
+            SeatTypeFixtures::class,
         ];
     }
 }
