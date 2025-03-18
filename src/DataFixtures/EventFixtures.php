@@ -10,6 +10,22 @@ use Doctrine\Persistence\ObjectManager;
 
 class EventFixtures extends Fixture implements DependentFixtureInterface
 {
+    
+    public const EVENT_REFERENCES = [
+
+        "Renaissance Tour",
+        "Champagne & Roses Tour",
+        "Past, Present, Future Tour",
+        "Exclusive Tour",
+        "Ronisia",
+        "Divinely Uninspired to a Hellish Extent Tour",
+        "The Mathematics Tour",
+        "Anti World Tour",
+        "Sam Smith unique concert",
+        "Jp Cooper concert"
+
+    ];
+
     public function load(ObjectManager $manager): void
     {
 
@@ -29,12 +45,12 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
             ],
             [
                 "artist" => "Usher",
-                "name" => "Past, Present, FUture Tour",
+                "name" => "Past, Present, Future Tour",
                 "description" => "Known for his hits 'yeah!', 'Love in This Club' or his great classic from 20 years ago 'My Boo' featuring Alicia Keys, Usher promises to take us on a journey between his past, his present but also his future"
             ],
             [
                 "artist" => "Chris Brown",
-                "name" => "Exclusive",
+                "name" => "Exclusive Tour",
                 "description" => "After releasing his 'exclusive' album, Chris Brown went on tour to promote it"
             ],
             [
@@ -86,6 +102,8 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
             $event->setDescription($one_event["description"]);
 
             $manager->persist($event);
+
+            $this->addReference(self::EVENT_REFERENCES[$index], $event);
             
         }
 
