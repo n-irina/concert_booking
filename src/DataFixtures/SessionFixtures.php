@@ -58,6 +58,18 @@ class SessionFixtures extends Fixture implements DependentFixtureInterface
 
             $manager->persist($session);
 
+            $key = $entry["event"] . " - " . $entry["hall"];
+
+            if (!isset($session_counters[$key])) {
+                $session_counters[$key] = 1;
+            } else {
+                $session_counters[$key]++;
+            }
+
+            $reference_key = $key . " " . $session_counters[$key];
+
+            $this->addReference($reference_key, $session);
+
         }
 
         $manager->flush();

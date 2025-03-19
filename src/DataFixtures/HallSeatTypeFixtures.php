@@ -36,14 +36,14 @@ class HallSeatTypeFixtures extends Fixture implements DependentFixtureInterface
 
         foreach ($data as $entry) {
             $hall = $this->getReference($entry["hall"], Hall::class );
-            $seatType = $this->getReference($entry["seat_type"], SeatType::class);
+            $seat_type = $this->getReference($entry["seat_type"], SeatType::class);
 
-            $hallSeatType = new HallSeatType();
-            $hallSeatType->setHall($hall);
-            $hallSeatType->setSeatType($seatType);
-            $hallSeatType->setCapacity($entry["capacity"]);
+            $hall_seat_type = new HallSeatType();
+            $hall_seat_type->setHall($hall);
+            $hall_seat_type->setSeatType($seat_type);
+            $hall_seat_type->setCapacity($entry["capacity"]);
 
-            $manager->persist($hallSeatType);
+            $manager->persist($hall_seat_type);
 
         }
 

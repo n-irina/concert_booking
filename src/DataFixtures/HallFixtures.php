@@ -9,17 +9,17 @@ use Doctrine\Persistence\ObjectManager;
 class HallFixtures extends Fixture 
 {
 
-    public const HALL_REFERENCES = [
+    // public const HALL_REFERENCES = [
 
-        "La Cigale",
-        "La Maroquinerie",
-        "Olympia",
-        "La Gaîté Lyrique",
-        "Philharmonie de Paris",
-        "Accor Arena Bercy",
-        "Le Zénith de Paris"
+    //     "La Cigale",
+    //     "La Maroquinerie",
+    //     "Olympia",
+    //     "La Gaîté Lyrique",
+    //     "Philharmonie de Paris",
+    //     "Accor Arena Bercy",
+    //     "Le Zénith de Paris"
 
-    ];
+    // ];
 
     public function load(ObjectManager $manager): void
     {
@@ -69,7 +69,7 @@ class HallFixtures extends Fixture
             ],
         ];
 
-        foreach($halls as $index => $one_hall){
+        foreach($halls as $one_hall){
 
             $hall = new Hall();
             $hall->setName($one_hall["name"]);
@@ -79,7 +79,7 @@ class HallFixtures extends Fixture
 
             $manager->persist($hall);
 
-            $this->addReference(self::HALL_REFERENCES[$index], $hall);
+            $this->addReference($one_hall["name"], $hall);
 
         }
         

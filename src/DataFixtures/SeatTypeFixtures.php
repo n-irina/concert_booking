@@ -9,16 +9,6 @@ use Doctrine\Persistence\ObjectManager;
 class SeatTypeFixtures extends Fixture 
 {
 
-    public const SEAT_TYPE_REFERENCES = [
-
-        "VIP",
-        "Gold square",
-        "Front row",
-        "Rear row",
-        "Floor"
-
-    ];
-
     public function load(ObjectManager $manager): void
     {
 
@@ -45,7 +35,7 @@ class SeatTypeFixtures extends Fixture
             ],
         ];
 
-        foreach($seat_types as $index => $one_seat_type){
+        foreach($seat_types as $one_seat_type){
 
             $seat_type = new SeatType();
             $seat_type->setName($one_seat_type["name"]);
@@ -53,7 +43,7 @@ class SeatTypeFixtures extends Fixture
 
             $manager->persist($seat_type);
 
-            $this->addReference(self::SEAT_TYPE_REFERENCES[$index], $seat_type);
+            $this->addReference($one_seat_type["name"], $seat_type);
 
         }
 

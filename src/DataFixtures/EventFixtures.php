@@ -11,20 +11,20 @@ use Doctrine\Persistence\ObjectManager;
 class EventFixtures extends Fixture implements DependentFixtureInterface
 {
     
-    public const EVENT_REFERENCES = [
+    // public const EVENT_REFERENCES = [
 
-        "Renaissance Tour",
-        "Champagne & Roses Tour",
-        "Past, Present, Future Tour",
-        "Exclusive Tour",
-        "Ronisia",
-        "Divinely Uninspired to a Hellish Extent Tour",
-        "The Mathematics Tour",
-        "Anti World Tour",
-        "Sam Smith unique concert",
-        "Jp Cooper concert"
+    //     "Renaissance Tour",
+    //     "Champagne & Roses Tour",
+    //     "Past, Present, Future Tour",
+    //     "Exclusive Tour",
+    //     "Ronisia",
+    //     "Divinely Uninspired to a Hellish Extent Tour",
+    //     "The Mathematics Tour",
+    //     "Anti World Tour",
+    //     "Sam Smith unique concert",
+    //     "Jp Cooper concert"
 
-    ];
+    // ];
 
     public function load(ObjectManager $manager): void
     {
@@ -86,7 +86,7 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
 
         ];
 
-        foreach($events as $index => $one_event){
+        foreach($events as $one_event){
 
             $event = new Event();
             if (is_array($one_event["artist"])) {
@@ -103,7 +103,7 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
 
             $manager->persist($event);
 
-            $this->addReference(self::EVENT_REFERENCES[$index], $event);
+            $this->addReference($one_event["name"], $event);
             
         }
 
