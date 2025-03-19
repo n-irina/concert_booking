@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\EventRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
+#[ApiResource()]
 class Event
 {
     #[ORM\Id]
@@ -22,9 +24,9 @@ class Event
     private ?string $description = null;
 
     /**
-     * @var Collection<int, artist>
+     * @var Collection<int, Artist>
      */
-    #[ORM\ManyToMany(targetEntity: artist::class, inversedBy: 'events')]
+    #[ORM\ManyToMany(targetEntity: Artist::class, inversedBy: 'events')]
     private Collection $artist;
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\SessionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -9,6 +10,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SessionRepository::class)]
+#[ApiResource()]
 class Session
 {
     #[ORM\Id]
@@ -21,11 +23,11 @@ class Session
 
     #[ORM\ManyToOne(inversedBy: 'sessions')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?event $event = null;
+    private ?Event $event = null;
 
     #[ORM\ManyToOne(inversedBy: 'sessions')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?hall $hall = null;
+    private ?Hall $hall = null;
 
     /**
      * @var Collection<int, Booking>
@@ -62,24 +64,24 @@ class Session
         return $this;
     }
 
-    public function getEvent(): ?event
+    public function getEvent(): ?Event
     {
         return $this->event;
     }
 
-    public function setEvent(?event $event): static
+    public function setEvent(?Event $event): static
     {
         $this->event = $event;
 
         return $this;
     }
 
-    public function getHall(): ?hall
+    public function getHall(): ?Hall
     {
         return $this->hall;
     }
 
-    public function setHall(?hall $hall): static
+    public function setHall(?Hall $hall): static
     {
         $this->hall = $hall;
 

@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ArtistRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ArtistRepository::class)]
+#[ApiResource()]
 class Artist
 {
     #[ORM\Id]
@@ -25,9 +27,9 @@ class Artist
     private ?string $image_path = null;
 
     /**
-     * @var Collection<int, category>
+     * @var Collection<int, Category>
      */
-    #[ORM\ManyToMany(targetEntity: category::class, inversedBy: 'artists')]
+    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'artists')]
     private Collection $category;
 
     /**
@@ -91,7 +93,7 @@ class Artist
         return $this->category;
     }
 
-    public function addCategory(category $category): static
+    public function addCategory(Category $category): static
     {
         if (!$this->category->contains($category)) {
             $this->category->add($category);
@@ -100,7 +102,7 @@ class Artist
         return $this;
     }
 
-    public function removeCategory(category $category): static
+    public function removeCategory(Category $category): static
     {
         $this->category->removeElement($category);
 

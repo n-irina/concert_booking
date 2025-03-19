@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\SessionSeatTypeRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SessionSeatTypeRepository::class)]
+#[ApiResource()]
 class SessionSeatType
 {
     #[ORM\Id]
@@ -20,10 +22,10 @@ class SessionSeatType
     private ?int $available_seats = null;
 
     #[ORM\ManyToOne(inversedBy: 'sessionSeatTypes')]
-    private ?session $session = null;
+    private ?Session $session = null;
 
     #[ORM\ManyToOne(inversedBy: 'sessionSeatTypes')]
-    private ?seatType $seat_type = null;
+    private ?SeatType $seat_type = null;
 
     public function getId(): ?int
     {
@@ -54,24 +56,24 @@ class SessionSeatType
         return $this;
     }
 
-    public function getSession(): ?session
+    public function getSession(): ?Session
     {
         return $this->session;
     }
 
-    public function setSession(?session $session): static
+    public function setSession(?Session $session): static
     {
         $this->session = $session;
 
         return $this;
     }
 
-    public function getSeatType(): ?seatType
+    public function getSeatType(): ?SeatType
     {
         return $this->seat_type;
     }
 
-    public function setSeatType(?seatType $seat_type): static
+    public function setSeatType(?SeatType $seat_type): static
     {
         $this->seat_type = $seat_type;
 

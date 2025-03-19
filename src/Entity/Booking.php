@@ -2,11 +2,13 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\BookingRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BookingRepository::class)]
+#[ApiResource()]
 class Booking
 {
     #[ORM\Id]
@@ -22,15 +24,15 @@ class Booking
 
     #[ORM\ManyToOne(inversedBy: 'bookings')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?user $user = null;
+    private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'bookings')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?session $session = null;
+    private ?Session $session = null;
 
     #[ORM\ManyToOne(inversedBy: 'bookings')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?seattype $seat_type = null;
+    private ?SeatType $seat_type = null;
 
     public function getId(): ?int
     {
@@ -61,36 +63,36 @@ class Booking
         return $this;
     }
 
-    public function getUser(): ?user
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUser(?user $user): static
+    public function setUser(?User $user): static
     {
         $this->user = $user;
 
         return $this;
     }
 
-    public function getSession(): ?session
+    public function getSession(): ?Session
     {
         return $this->session;
     }
 
-    public function setSession(?session $session): static
+    public function setSession(?Session $session): static
     {
         $this->session = $session;
 
         return $this;
     }
 
-    public function getSeatType(): ?seattype
+    public function getSeatType(): ?SeatType
     {
         return $this->seat_type;
     }
 
-    public function setSeatType(?seattype $seat_type): static
+    public function setSeatType(?SeatType $seat_type): static
     {
         $this->seat_type = $seat_type;
 

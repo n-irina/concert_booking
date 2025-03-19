@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\HallSeatTypeRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: HallSeatTypeRepository::class)]
+#[ApiResource()]
 class HallSeatType
 {
     #[ORM\Id]
@@ -17,10 +19,10 @@ class HallSeatType
     private ?int $capacity = null;
 
     #[ORM\ManyToOne(inversedBy: 'hallSeatTypes')]
-    private ?hall $hall = null;
+    private ?Hall $hall = null;
 
     #[ORM\ManyToOne(inversedBy: 'hallSeatTypes')]
-    private ?seatType $seat_type = null;
+    private ?SeatType $seat_type = null;
 
     public function getId(): ?int
     {
@@ -39,24 +41,24 @@ class HallSeatType
         return $this;
     }
 
-    public function getHall(): ?hall
+    public function getHall(): ?Hall
     {
         return $this->hall;
     }
 
-    public function setHall(?hall $hall): static
+    public function setHall(?Hall $hall): static
     {
         $this->hall = $hall;
 
         return $this;
     }
 
-    public function getSeatType(): ?seatType
+    public function getSeatType(): ?SeatType
     {
         return $this->seat_type;
     }
 
-    public function setSeatType(?seatType $seat_type): static
+    public function setSeatType(?SeatType $seat_type): static
     {
         $this->seat_type = $seat_type;
 
