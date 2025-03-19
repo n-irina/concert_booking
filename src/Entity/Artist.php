@@ -18,7 +18,7 @@ class Artist
     #[ORM\Column(length: 255)]
     private ?string $nickname = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 355)]
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
