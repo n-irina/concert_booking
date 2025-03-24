@@ -1,1 +1,11 @@
-/* You can add global styles to this file, and also import other style files */
+body{
+  background-image: url('https://127.0.0.1:8000/media/fond.png');
+  // background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+body nav a li{
+  text-decoration: none;
+  list-style: none;
+}
