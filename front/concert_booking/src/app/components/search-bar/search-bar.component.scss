@@ -11,7 +11,7 @@
     width: 35rem;
   }
 
-  .search-icon {
+  .search-icon, .delete-icon {
     width: 24px;
     height: 24px;
     display: inline-block;
@@ -37,7 +37,7 @@
   left: 0;
 }
 
-.search-icon{
+.search-icon, .delete-icon{
   position: absolute;
   right: 0;
 }
