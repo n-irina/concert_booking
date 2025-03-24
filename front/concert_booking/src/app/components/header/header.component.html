@@ -16,10 +16,10 @@
           <a class="nav-link" routerLink="/halls">Halls</a>
         </li>
       </ul>
-      <div class="search-bar">
-        <app-search-bar (search)="onSearch($event)"></app-search-bar>
-      </div>
       <ul class="navbar-nav ms-auto">
+        <div class="search-bar">
+          <app-search-bar (search)="onSearch($event)"></app-search-bar>
+        </div>
         <li class="nav-item">
           <a class="nav-link" routerLink="/connexion">
             <div class="header-icon">
