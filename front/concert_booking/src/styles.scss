@@ -1,11 +1,18 @@
-body{
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
   background-image: url('https://127.0.0.1:8000/media/fond.png');
-  // background-repeat: no-repeat;
+  background-repeat: no-repeat;
   background-size: cover;
-  background-position: center;
+  background-position: center center;
+  background-attachment: fixed;
 }
 
-body nav a li{
+nav a {
   text-decoration: none;
+}
+
+nav li {
   list-style: none;
 }
