@@ -41,6 +41,9 @@ class Hall
     #[ORM\OneToMany(targetEntity: HallSeatType::class, mappedBy: 'hall')]
     private Collection $hallSeatTypes;
 
+    #[ORM\Column(length: 255)]
+    private ?string $picture_path = null;
+
     public function __construct()
     {
         $this->sessions = new ArrayCollection();
@@ -156,6 +159,18 @@ class Hall
                 $hallSeatType->setHall(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPicturePath(): ?string
+    {
+        return $this->picture_path;
+    }
+
+    public function setPicturePath(string $picture_path): static
+    {
+        $this->picture_path = $picture_path;
 
         return $this;
     }

@@ -35,6 +35,9 @@ class Event
     #[ORM\OneToMany(targetEntity: Session::class, mappedBy: 'event')]
     private Collection $sessions;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $picture_path = null;
+
     public function __construct()
     {
         $this->artist = new ArrayCollection();
@@ -120,6 +123,18 @@ class Event
                 $session->setEvent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPicturePath(): ?string
+    {
+        return $this->picture_path;
+    }
+
+    public function setPicturePath(?string $picture_path): static
+    {
+        $this->picture_path = $picture_path;
 
         return $this;
     }
