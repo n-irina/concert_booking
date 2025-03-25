@@ -1,0 +1,10 @@
+<div class="banner-container" *ngIf="future_events.length">
+  <button class="arrow left" (click)="prev()">❮</button>
+
+  <div class="event-banner">
+    <img [src]="'http://localhost:8000/media/' + future_events[currentIndex].picture_path" alt="event image" />
+    <h3>{{ future_events[currentIndex].name }}</h3>
+  </div>
+
+  <button class="arrow right" (click)="next()">❯</button>
+</div>

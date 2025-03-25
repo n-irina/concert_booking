@@ -19,7 +19,7 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
                 "artist" => "Beyoncé",
                 "name" => "Renaissance Tour",
                 "description" => "The Renaissance World Tour was the ninth concert tour by American singer and songwriter Beyoncé. Her highest-grossing tour to date, it was staged in support of her seventh studio album, Renaissance (2022).",
-                "picture_path" => "concert_beyoncé.jpg",
+                "picture_path" => "concert_beyonce.jpg",
             ],
             [
                 "artist" => [
@@ -34,7 +34,7 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
                 "artist" => "Usher",
                 "name" => "Past, Present, Future Tour",
                 "description" => "Known for his hits 'yeah!', 'Love in This Club' or his great classic from 20 years ago 'My Boo' featuring Alicia Keys, Usher promises to take us on a journey between his past, his present but also his future",
-                "picture_path" => "concert_user.jpg"
+                "picture_path" => "concert_usher.jpg"
             ],
             [
                 "artist" => "Chris Brown",

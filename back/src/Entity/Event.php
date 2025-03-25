@@ -2,14 +2,29 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Get;
+use App\Filter\FutureEventsFilter;
+use App\Filter\HallEventsFilter;
+use App\Filter\HomeEventsFilter;
+use App\Filter\PastEventsFilter;
 use App\Repository\EventRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
-#[ApiResource()]
+#[ApiResource(
+    operations:[
+        new Get(),
+        new GetCollection()
+    ]
+)]
+#[ApiFilter(FutureEventsFilter::class)] // url: /api/events?future=true
+#[ApiFilter(PastEventsFilter::class)] // url: /api/events?future=false
+#[ApiFilter(HallEventsFilter::class)] // url: /api/events?hall=***
 class Event
 {
     #[ORM\Id]
