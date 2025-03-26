@@ -16,6 +16,7 @@ class Artist
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["event_read"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]

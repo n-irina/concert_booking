@@ -8,16 +8,6 @@ use Doctrine\Persistence\ObjectManager;
 
 class CategoryFixtures extends Fixture
 {
-    // public const CATEGORY_REFERENCES = [
-
-    //     "R&B",
-    //     "Pop",
-    //     "Reggae",
-    //     "Rap",
-    //     "Urban pop",
-    //     "Rock"
-
-    // ];
 
     public function load(ObjectManager $manager): void
     {

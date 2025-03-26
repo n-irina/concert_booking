@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Get;
+use App\Filter\ArtistEventsFilter;
 use App\Filter\FutureEventsFilter;
 use App\Filter\HallEventsFilter;
 use App\Filter\HomeEventsFilter;
@@ -29,11 +30,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiFilter(FutureEventsFilter::class)] // url: /api/events?future=true
 #[ApiFilter(PastEventsFilter::class)] // url: /api/events?future=false
 #[ApiFilter(HallEventsFilter::class)] // url: /api/events?hall=***
+#[ApiFilter(ArtistEventsFilter::class)] // url: /api/events?artist=**
 class Event
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["event_read"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]

@@ -1,4 +1,4 @@
-.banner-container {
+.container {
   position: relative;
   display: flex;
   align-items: center;
@@ -9,14 +9,13 @@
   padding: 1rem;
 }
 
-.event-banner {
+.event-past {
   text-align: center;
   height: 300px;
 
   img {
-    width: 100%;
-    max-width: 600px;
-    max-height: 200px;
+    width: 300px;
+    height: 200px;
     border-radius: 10px;
     object-fit: cover;
   }
@@ -25,7 +24,7 @@
     margin-top: 0.5rem;
   }
 
-  .event-banner-artist{
+  .event-past-artist{
     color: #43c8c8;
     -webkit-text-stroke: 0.5px #555452;
     text-shadow:
@@ -35,28 +34,4 @@
      0.5px  0.5px 0 #555452;
   }
 
-  .event-banner-sessions{
-    color: #555452;
-    font-size: 0.5rem;
-  }
-}
-
-.arrow {
-  background: none;
-  border: none;
-  font-size: 2rem;
-  cursor: pointer;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
-  padding: 0.5rem;
-
-  &.left {
-    left: 0;
-  }
-
-  &.right {
-    right: 0;
-  }
 }

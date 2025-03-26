@@ -39,4 +39,15 @@ export class GetEventsService {
 
   }
 
+  getArtistEvents(id: number): Observable<Api<Event_api>>{
+
+    return this.http.get<Api<Event_api>>(this.API_URL + "/events?artist=" + id);
+
+  }
+
+  getEventById(id: number): Observable<Event_api>{
+
+    return this.http.get<Event_api>(this.API_URL + "/events/" + id);
+
+  }
 }

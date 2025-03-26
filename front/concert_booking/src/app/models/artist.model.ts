@@ -13,3 +13,15 @@ export interface Artist {
   "events": Event_api[],
 
 }
+
+// export interface Artist {
+
+//   "@id": string,
+//   "@type": string,
+//   "id": number,
+//   "nickname": string,
+//   "description": string,
+//   "image_path": string,
+//   "category": string[],
+//   "events": string[],
+// }

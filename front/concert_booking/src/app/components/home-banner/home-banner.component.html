@@ -1,7 +1,8 @@
 <div class="banner-container" *ngIf="future_events.length">
+
   <button class="arrow left" (click)="prev()">❮</button>
 
-  <div class="event-banner">
+  <div class="event-banner" (click)="goToConcertDetail(future_events[currentIndex].id)">
     <img [src]="'http://localhost:8000/media/' + future_events[currentIndex].picture_path" alt="event image" />
     <div class="event-banner-info">
       <h3 class="event-banner-title">{{ future_events[currentIndex].name }}</h3>
@@ -20,9 +21,6 @@
         <div class="sessions" *ngIf="future_events[currentIndex].sessions && future_events[currentIndex].sessions.length == 1">
           <h4>Only on {{ future_events[currentIndex].sessions[0].date_time |date:"short" }}</h4>
         </div>
-      </div>
-      <div class="event_banner-hall" *ngFor="let session of future_events[currentIndex].sessions; let i = index">
-        <h5>At {{ future_events[currentIndex].sessions[i].hall.name}}</h5>
       </div>
     </div>
   </div>

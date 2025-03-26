@@ -2,15 +2,15 @@ import { Component } from '@angular/core';
 import { Event_api } from '../../models/event_api.model';
 import { GetEventsService } from '../../services/get-events.service';
 import { Api } from '../../models/api.model';
-import { CommonModule, DatePipe, NgFor, NgIf } from '@angular/common';
+import { CommonModule, DatePipe, NgIf } from '@angular/common';
 import { FormatArtistsPipe } from '../../pipes/format-artists.pipe';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home-banner',
   standalone: true,
   imports: [
     NgIf,
-    NgFor,
     CommonModule,
     DatePipe,
     FormatArtistsPipe,
@@ -24,6 +24,7 @@ export class HomeBannerComponent {
 
   constructor(
     private event_service: GetEventsService,
+    private router: Router,
   ){ }
 
 
@@ -54,6 +55,19 @@ export class HomeBannerComponent {
 
   prev() {
     this.currentIndex = (this.currentIndex - 1 + this.future_events.length) % this.future_events.length;
+  }
+
+
+  goToConcertDetail(id: number): void {
+    // const event = this.future_events[this.currentIndex];
+    // const artist = event.artist[0]; // tu peux adapter si plusieurs artistes
+
+    // if (event && artist) {
+    //   this.router.navigate(['/concert', event.id], {
+    //     queryParams: { artistId: artist.id } // on passe l’id dans l’URL
+    //   });
+    // }
+    this.router.navigate(['/concert/'+ id]);
   }
 
 }
