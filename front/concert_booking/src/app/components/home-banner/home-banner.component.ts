@@ -2,14 +2,18 @@ import { Component } from '@angular/core';
 import { Event_api } from '../../models/event_api.model';
 import { GetEventsService } from '../../services/get-events.service';
 import { Api } from '../../models/api.model';
-import { CommonModule, NgIf } from '@angular/common';
+import { CommonModule, DatePipe, NgFor, NgIf } from '@angular/common';
+import { FormatArtistsPipe } from '../../pipes/format-artists.pipe';
 
 @Component({
   selector: 'app-home-banner',
   standalone: true,
   imports: [
     NgIf,
+    NgFor,
     CommonModule,
+    DatePipe,
+    FormatArtistsPipe,
   ],
   templateUrl: './home-banner.component.html',
   styleUrl: './home-banner.component.scss'
@@ -44,12 +48,12 @@ export class HomeBannerComponent {
 
   currentIndex: number = 0;
 
-prev() {
-  this.currentIndex = (this.currentIndex - 1 + this.future_events.length) % this.future_events.length;
-}
+  next() {
+    this.currentIndex = (this.currentIndex + 1) % this.future_events.length;
+  }
 
-next() {
-  this.currentIndex = (this.currentIndex + 1) % this.future_events.length;
-}
+  prev() {
+    this.currentIndex = (this.currentIndex - 1 + this.future_events.length) % this.future_events.length;
+  }
 
 }

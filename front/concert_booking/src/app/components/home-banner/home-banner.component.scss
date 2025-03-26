@@ -5,6 +5,7 @@
   justify-content: center;
   max-width: 800px;
   margin: auto;
+  margin-top: 100px;
   padding: 1rem;
 }
 
@@ -19,8 +20,18 @@
     object-fit: cover;
   }
 
-  h3 {
+  h3, h4 {
     margin-top: 1rem;
+  }
+
+  .event-banner-artist{
+    color: #43c8c8;
+    -webkit-text-stroke: 0.5px #555452;
+    text-shadow:
+    -0.5px -0.5px 0 #555452,
+     0.5px -0.5px 0 #555452,
+    -0.5px  0.5px 0 #555452,
+     0.5px  0.5px 0 #555452;
   }
 }
 

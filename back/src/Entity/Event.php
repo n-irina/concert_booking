@@ -14,9 +14,13 @@ use App\Repository\EventRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
 #[ApiResource(
+    normalizationContext: [
+        "groups" => ["event_read"],
+    ],
     operations:[
         new Get(),
         new GetCollection()
@@ -33,24 +37,29 @@ class Event
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["event_read"])]
     private ?string $name = null;
 
     #[ORM\Column(length: 355)]
+    #[Groups(["event_read"])]
     private ?string $description = null;
 
     /**
      * @var Collection<int, Artist>
      */
     #[ORM\ManyToMany(targetEntity: Artist::class, inversedBy: 'events')]
+    #[Groups(["event_read"])]
     private Collection $artist;
 
     /**
      * @var Collection<int, Session>
      */
     #[ORM\OneToMany(targetEntity: Session::class, mappedBy: 'event')]
+    #[Groups(["event_read"])]
     private Collection $sessions;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(["event_read"])]
     private ?string $picture_path = null;
 
     public function __construct()
