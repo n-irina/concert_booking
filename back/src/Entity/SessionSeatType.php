@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\SessionSeatTypeRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: SessionSeatTypeRepository::class)]
 #[ApiResource()]
@@ -16,6 +17,7 @@ class SessionSeatType
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Groups(["event_read"])]
     private ?int $price = null;
 
     #[ORM\Column]

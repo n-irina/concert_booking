@@ -33,6 +33,7 @@ class Artist
      * @var Collection<int, Category>
      */
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'artists')]
+    #[Groups(["event_read"])]
     private Collection $category;
 
     /**

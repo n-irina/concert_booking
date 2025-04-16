@@ -1,43 +1,66 @@
 .search-bar {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  position: relative;
+  width: 100%;
 
   input {
     flex: 1;
     padding: 0.5rem;
     width: 35rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
   }
 
   .search-icon, .delete-icon {
+    position: absolute;
+    right: 10px;
     width: 24px;
     height: 24px;
-    display: inline-block;
+    cursor: pointer;
+
     svg {
       width: 100%;
       height: 100%;
-      display: block;
-      fill:#43c8c8;
+      fill: #43c8c8;
     }
 
-    svg:hover{
-      fill:#555452;
+    svg:hover {
+      fill: #555452;
     }
-    cursor: pointer;
-    margin-right: 0.5rem;
   }
 
-}
+  .suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    margin-top: 0.2rem;
+    padding: 0;
 
-.input{
-  position: absolute;
-  top: 0;
-  left: 0;
-}
+    li {
+      padding: 0.5rem 1rem;
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
 
-.search-icon, .delete-icon{
-  position: absolute;
-  right: 0;
+      &:hover {
+        background-color: #f0f0f0;
+      }
+
+      .type {
+        font-size: 0.8rem;
+        color: #aaa;
+      }
+    }
+  }
 }

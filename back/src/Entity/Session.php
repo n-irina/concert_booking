@@ -29,6 +29,7 @@ class Session
 
     #[ORM\ManyToOne(inversedBy: 'sessions')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(["event_read"])]
     private ?Hall $hall = null;
 
     /**
@@ -41,6 +42,7 @@ class Session
      * @var Collection<int, SessionSeatType>
      */
     #[ORM\OneToMany(targetEntity: SessionSeatType::class, mappedBy: 'session')]
+    #[Groups(["event_read"])]
     private Collection $sessionSeatTypes;
 
     public function __construct()

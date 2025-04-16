@@ -1,10 +1,14 @@
 <div class="container" *ngIf="past_event.length">
-  <div class="past_event" *ngFor="let event of past_event">
-    <div class="event-past">
-      <img [src]="'http://localhost:8000/media/' + event.picture_path" alt="event image" (click)="goToConcertDetail(event.id)"/>
+  <div class="container-title">
+    <h2>Oops... Seems like you missed them!</h2>
+    <h3>Stay tuned...</h3>
+  </div>
+  <div class="past_event-wrapper">
+    <div class="event-past" *ngFor="let event of past_event">
+      <img [src]="'http://localhost:8000/media/' + event.picture_path" alt="event image" (click)="goToConcertDetail(event.id)" />
       <div class="event-past-info">
-        <div class="event-past-artist" *ngIf="past_event.length > 0">
-          <h3> {{ event.artist | formatArtists }} </h3>
+        <div class="event-past-artist">
+          <h3>{{ event.artist | formatArtists }}</h3>
         </div>
         <h3 class="event-past-title">{{ event.name }}</h3>
       </div>

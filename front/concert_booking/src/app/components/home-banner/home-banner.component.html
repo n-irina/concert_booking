@@ -9,19 +9,6 @@
       <div class="event-banner-artist" *ngIf="future_events.length > 0">
         <h3> {{ future_events[currentIndex].artist | formatArtists }} </h3>
       </div>
-      <div class="event-banner-sessions">
-        <div class="sessions" *ngIf="future_events[currentIndex].sessions && future_events[currentIndex].sessions.length > 2">
-          <h4>From {{ future_events[currentIndex].sessions[0].date_time | date:"short" }}</h4>
-          <h4>To {{ future_events[currentIndex].sessions[future_events[currentIndex].sessions.length - 1].date_time | date:"short" }}</h4>
-        </div>
-        <div class="sessions" *ngIf="future_events[currentIndex].sessions && future_events[currentIndex].sessions.length == 2">
-          <h4>On {{ future_events[currentIndex].sessions[0].date_time | date:"short" }}</h4>
-          <h4>And {{ future_events[currentIndex].sessions[future_events[currentIndex].sessions.length - 1].date_time | date:"short"}}</h4>
-        </div>
-        <div class="sessions" *ngIf="future_events[currentIndex].sessions && future_events[currentIndex].sessions.length == 1">
-          <h4>Only on {{ future_events[currentIndex].sessions[0].date_time |date:"short" }}</h4>
-        </div>
-      </div>
     </div>
   </div>
 
