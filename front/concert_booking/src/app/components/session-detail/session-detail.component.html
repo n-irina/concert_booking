@@ -5,12 +5,10 @@
       <h2 class="event-title">{{ event.name }} - {{ hallName }}</h2>
       <h5 class="price">starting at {{ minimum_price }}$</h5>
     </div>
-
     <!-- Contenu principal -->
     <div class="card-content-wrapper">
       <div class="card-text">
         <img [src]="'https://localhost:8000/media/' + event.picture_path" alt="event image" />
-
         <div class="info-content">
           <div class="sessions" *ngIf="session.length === 1">
             <h3>Only on {{ session[0].date_time | date: 'fullDate' }}</h3>
@@ -18,19 +16,20 @@
           <div class="sessions" *ngIf="session.length >= 2">
             <h3>From {{ session[0].date_time | date: 'fullDate' }}</h3>
           </div>
-
           <h4 class="concert-type">CONCERT - {{ categories | formatCategories | uppercase }}</h4>
           <h4 class="event-artists">Artist: {{ event.artist | formatArtists }}</h4>
           <h4 class="session-adress">
-            {{ hallName }}
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+            <div class="session-venue">
+              {{ hallName }}
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
               <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243
                 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
-            </svg>
-            <br/>
-            {{ hall.address | uppercase }}
+              </svg>
+            </div>
+            <div class="session-venue-adress">
+              {{ hall.address | uppercase }}
+            </div>
           </h4>
-
           <button class="btn-info" (click)="showInformation()">Information</button>
         </div>
       </div>
@@ -55,22 +54,22 @@
             {{ event.description }} <br />
             Book your concert's ticket for: {{ event.name | uppercase }} - {{ hallName | uppercase }} <br />
             Price is from: {{ minimum_price }}$
-
             <p *ngIf="session.length === 1">
               Date: {{ session[0].date_time | date: 'fullDate' }}
             </p>
             <p *ngIf="session.length >= 2">
               Date: {{ session[0].date_time | date: 'fullDate' }} to {{ session[session.length - 1].date_time | date: 'fullDate' }}
             </p>
-
-            Venue: {{ hallName | uppercase }}.
+            <p>
+              Venue: {{ hallName | uppercase }}.
+            </p>
           </div>
         </div>
 
         <strong>Placement and price</strong>
         <div class="placement-price">
           <div class="placement" *ngFor="let seatType of session[0].sessionSeatTypes">
-            {{ seatType.seat_type.name }}: {{ seatType.seat_type.description }} ({{ seatType.price }}$)
+          {{ seatType.seat_type.name }}: {{ seatType.seat_type.description }} ({{ seatType.price }}$)
           </div>
         </div>
       </div>

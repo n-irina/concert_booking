@@ -19,7 +19,7 @@ class Category
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["event_read", "session_read"])]
+    #[Groups(["event_read", "session_read", "artist_read"])]
     private ?string $name = null;
 
     /**

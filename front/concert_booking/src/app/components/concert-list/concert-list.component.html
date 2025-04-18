@@ -1,1 +1,16 @@
-<p>concert-list works!</p>
+<div class="container" *ngIf="future_events">
+  <div class="card" *ngFor="let event of future_events">
+    <div class="card-body">
+      <img [src]="'https://localhost:8000/media/' + event.picture_path" alt="event image" (click)="goToDetails(event.id)"/>
+      <div class="card-text">
+        <div class="card-title">
+          <h2 class="event-title" (click)="goToDetails(event.id)">{{ event.name }}</h2>
+        </div>
+        <div class="info-content">
+          <h4 class="concert-type">CONCERT - {{ getUniqueCategories(event) | formatCategories | uppercase }}</h4>
+          <h4 class="event-artists">Artist(s): {{ event.artist | formatArtists }}</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

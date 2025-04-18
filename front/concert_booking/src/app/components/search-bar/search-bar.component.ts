@@ -42,7 +42,7 @@ export class SearchBarComponent {
       this.suggestionsVisible = false;
     }
   }
-  
+
   onTyping(event: Event) {
     const input = event.target as HTMLInputElement;
     this.searchText = input.value;
@@ -75,9 +75,9 @@ export class SearchBarComponent {
     if (item.type === 'event') {
       this.router.navigate(['/concert', item.id]);
     } else if (item.type === 'artist') {
-      this.router.navigate(['/artists', item.id]);
+      this.router.navigate(['/artist', item.id]);
     } else if (item.type === 'category') {
-      this.router.navigate(['/categories', item.id]);
+      this.router.navigate(['/category', item.id]);
     }
   }
 }

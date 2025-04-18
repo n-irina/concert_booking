@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Get;
 use App\Repository\ArtistRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -10,37 +12,47 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ArtistRepository::class)]
-#[ApiResource()]
+#[ApiResource(
+    normalizationContext: [
+        "groups" => ["artist_read"],
+    ],
+    operations:[
+        new Get(),
+        new GetCollection()
+    ]
+)]
 class Artist
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["event_read"])]
+    #[Groups(["event_read", "artist_read"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["event_read", "session_read"])]
+    #[Groups(["event_read", "session_read", "artist_read"])]
     private ?string $nickname = null;
 
     #[ORM\Column(length: 355)]
-    #[Groups(["session_read"])]
+    #[Groups(["session_read", "artist_read"])]
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["artist_read"])]
     private ?string $image_path = null;
 
     /**
      * @var Collection<int, Category>
      */
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'artists')]
-    #[Groups(["event_read", "session_read"])]
+    #[Groups(["event_read", "session_read", "artist_read"])]
     private Collection $category;
 
     /**
      * @var Collection<int, Event>
      */
     #[ORM\ManyToMany(targetEntity: Event::class, mappedBy: 'artist')]
+    #[Groups(["artist_read"])]
     private Collection $events;
 
     public function __construct()

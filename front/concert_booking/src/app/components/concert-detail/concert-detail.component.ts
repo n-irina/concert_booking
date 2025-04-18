@@ -125,7 +125,7 @@ export class ConcertDetailComponent implements OnInit{
   }
 
   goToDetails(hall: string, eventId: string): void{
-    this.router.navigate(['/session/'], {queryParams: { hall: hall, eventId: eventId}});
+    this.router.navigate(["/session/"], {queryParams: { hall: hall, eventId: eventId}});
   }
 
 }
