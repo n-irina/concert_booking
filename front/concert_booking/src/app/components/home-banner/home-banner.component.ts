@@ -12,7 +12,6 @@ import { Router } from '@angular/router';
   imports: [
     NgIf,
     CommonModule,
-    DatePipe,
     FormatArtistsPipe,
   ],
   templateUrl: './home-banner.component.html',

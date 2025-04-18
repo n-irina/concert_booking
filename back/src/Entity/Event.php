@@ -36,22 +36,22 @@ class Event
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["event_read"])]
+    #[Groups(["event_read", "session_read"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["event_read"])]
+    #[Groups(["event_read", "session_read"])]
     private ?string $name = null;
 
     #[ORM\Column(length: 355)]
-    #[Groups(["event_read"])]
+    #[Groups(["event_read", "session_read"])]
     private ?string $description = null;
 
     /**
      * @var Collection<int, Artist>
      */
     #[ORM\ManyToMany(targetEntity: Artist::class, inversedBy: 'events')]
-    #[Groups(["event_read"])]
+    #[Groups(["event_read", "session_read"])]
     private Collection $artist;
 
     /**
@@ -62,7 +62,7 @@ class Event
     private Collection $sessions;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["event_read"])]
+    #[Groups(["event_read", "session_read"])]
     private ?string $picture_path = null;
 
     public function __construct()

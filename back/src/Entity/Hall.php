@@ -19,16 +19,19 @@ class Hall
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["event_read"])]
+    #[Groups(["event_read", "session_read"])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["session_read"])]
     private ?string $address = null;
 
     #[ORM\Column]
+    #[Groups(["session_read"])]
     private ?int $capacity = null;
 
     #[ORM\Column(length: 355)]
+    #[Groups(["session_read"])]
     private ?string $description = null;
 
     /**

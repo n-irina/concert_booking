@@ -17,16 +17,18 @@ class SessionSeatType
     private ?int $id = null;
 
     #[ORM\Column]
-    #[Groups(["event_read"])]
+    #[Groups(["event_read","session_read"])]
     private ?int $price = null;
 
     #[ORM\Column]
+    #[Groups(["session_read"])]
     private ?int $available_seats = null;
 
     #[ORM\ManyToOne(inversedBy: 'sessionSeatTypes')]
     private ?Session $session = null;
 
     #[ORM\ManyToOne(inversedBy: 'sessionSeatTypes')]
+    #[Groups(["session_read"])]
     private ?SeatType $seat_type = null;
 
     public function getId(): ?int

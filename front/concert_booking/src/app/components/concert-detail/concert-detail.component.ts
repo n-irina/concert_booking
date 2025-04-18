@@ -5,8 +5,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe, KeyValuePipe, NgFor, NgIf, UpperCasePipe } from '@angular/common';
 import { FormatArtistsPipe } from '../../pipes/format-artists.pipe';
 import { Session } from '../../models/session.model';
-import { Hall } from '../../models/hall.model';
 import { Category } from '../../models/category.model';
+import { FormatCategoriesPipe } from '../../pipes/format-categories.pipe';
+import { EventSharedService } from '../../services/event-shared.service';
+import { Hall } from '../../models/hall.model';
 
 @Component({
   selector: 'app-concert-detail',
@@ -17,7 +19,8 @@ import { Category } from '../../models/category.model';
     FormatArtistsPipe,
     KeyValuePipe,
     DatePipe,
-    UpperCasePipe
+    UpperCasePipe,
+    FormatCategoriesPipe,
   ],
   templateUrl: './concert-detail.component.html',
   styleUrl: './concert-detail.component.scss'
@@ -26,12 +29,14 @@ export class ConcertDetailComponent implements OnInit{
 
   event: Event_api | undefined;
   grouped_sessions:{ [hall: string]: Session[] } = {};
-  minimum_price: number = 0;
+  minimum_price: { [hall: string]: number } = {};
   event_category: Category[] = [];
 
   constructor(
     private event_service: GetEventsService,
+    private shared_service: EventSharedService,
     private activatedRoute: ActivatedRoute,
+    private router: Router,
   ){ }
 
   ngOnInit(): void {
@@ -62,9 +67,9 @@ export class ConcertDetailComponent implements OnInit{
       (res: Event_api) => {
         this.event = res;
         this.grouped_sessions = this.groupSessionsByHall(this.event?.sessions);
-        this.minimum_price = this.getMinimumPrice(this.event?.sessions);
+        this.minimum_price = this.calculateMinPricesByHall(this.grouped_sessions);
         this.event_category = this.getUniqueCategories(this.event);
-        console.log("detail event",this.event_category )
+        this.shared_service.setCategories(this.event_category);
       },
       (error) => {
         console.error("Error fetching future events", error);
@@ -88,19 +93,27 @@ export class ConcertDetailComponent implements OnInit{
     return grouped;
   }
 
-  getMinimumPrice(sessions: Session[]): number {
-    let minPrice = Infinity;
+  calculateMinPricesByHall(grouped: { [hall: string]: Session[] }): { [hall: string]: number } {
+    const prices: { [hall: string]: number } = {};
 
-    for (const session of sessions) {
-      for (const seatType of session.sessionSeatTypes || []) {
-        if (seatType.price < minPrice) {
-          minPrice = seatType.price;
+    for (const hall in grouped) {
+      const sessions = grouped[hall];
+      let min = Infinity;
+
+      for (const session of sessions) {
+        for (const seat of session.sessionSeatTypes || []) {
+          if (seat.price < min) {
+            min = seat.price;
+          }
         }
       }
+
+      prices[hall] = min === Infinity ? 0 : min;
     }
 
-    return minPrice === Infinity ? 0 : minPrice;
+    return prices;
   }
+
 
   getUniqueCategories(event: Event_api): Category[] {
     const allCategories = event.artist.flatMap(a => a.category);
@@ -111,5 +124,8 @@ export class ConcertDetailComponent implements OnInit{
     return Array.from(unique.values());
   }
 
+  goToDetails(hall: string, eventId: string): void{
+    this.router.navigate(['/session/'], {queryParams: { hall: hall, eventId: eventId}});
+  }
 
 }

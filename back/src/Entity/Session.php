@@ -2,7 +2,12 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Get;
+use App\Filter\HallArtistSessionsFilter;
+use App\Filter\HallEventSessionsFilter;
 use App\Repository\SessionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -11,25 +16,36 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: SessionRepository::class)]
-#[ApiResource()]
+#[ApiResource(
+    normalizationContext: [
+        "groups" => ["session_read"],
+    ],
+    operations:[
+        new Get(),
+        new GetCollection()
+    ]
+)]
+#[ApiFilter(HallEventSessionsFilter::class, properties:["hall", "event"])] // url: /api/sessions?hall=***&eventId=****
 class Session
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["event_read", "session_read"])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(["event_read"])]
+    #[Groups(["event_read", "session_read"])]
     private ?\DateTimeInterface $date_time = null;
 
     #[ORM\ManyToOne(inversedBy: 'sessions')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(["session_read"])]
     private ?Event $event = null;
 
     #[ORM\ManyToOne(inversedBy: 'sessions')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(["event_read"])]
+    #[Groups(["event_read", "session_read"])]
     private ?Hall $hall = null;
 
     /**
@@ -42,7 +58,7 @@ class Session
      * @var Collection<int, SessionSeatType>
      */
     #[ORM\OneToMany(targetEntity: SessionSeatType::class, mappedBy: 'session')]
-    #[Groups(["event_read"])]
+    #[Groups(["event_read", "session_read"])]
     private Collection $sessionSeatTypes;
 
     public function __construct()

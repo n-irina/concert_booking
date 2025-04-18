@@ -20,10 +20,11 @@ class Artist
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["event_read"])]
+    #[Groups(["event_read", "session_read"])]
     private ?string $nickname = null;
 
     #[ORM\Column(length: 355)]
+    #[Groups(["session_read"])]
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
@@ -33,7 +34,7 @@ class Artist
      * @var Collection<int, Category>
      */
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'artists')]
-    #[Groups(["event_read"])]
+    #[Groups(["event_read", "session_read"])]
     private Collection $category;
 
     /**
