@@ -5,16 +5,15 @@ import { Router } from '@angular/router';
 import { Api } from '../../models/api.model';
 import { NgFor, NgIf, UpperCasePipe } from '@angular/common';
 import { FormatCategoriesPipe } from '../../pipes/format-categories.pipe';
+import { CardListComponent } from "../card-list/card-list.component";
 
 @Component({
   selector: 'app-artist-list',
   standalone: true,
   imports: [
     NgIf,
-    NgFor,
-    UpperCasePipe,
-    FormatCategoriesPipe,
-  ],
+    CardListComponent
+],
   templateUrl: './artist-list.component.html',
   styleUrl: './artist-list.component.scss'
 })
@@ -46,7 +45,4 @@ export class ArtistListComponent {
       .sort(() => 0.5 - Math.random())
   }
 
-  goToDetails(id: number): void{
-    this.router.navigate(["artist/" + id]);
-  }
 }

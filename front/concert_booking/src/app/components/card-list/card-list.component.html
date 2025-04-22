@@ -1,0 +1,32 @@
+<div class="card-list-container">
+  <div class="card" *ngFor="let item of items">
+    <div class="card-body">
+      <img [src]="'https://localhost:8000/media/' + (type === 'artist' ? item.image_path : item.picture_path)"
+           alt="card image"
+           (click)="goToDetails(item.id)" />
+      <div class="card-text">
+        <div class="card-title">
+          <h2 class="card-name" (click)="goToDetails(item.id)">{{ type === 'artist' ? item.nickname : item.name }}</h2>
+        </div>
+        <div class="info-content">
+          <h4 class="concert-type" *ngIf="type === 'artist'">
+            CATEGORY - {{ item.category | formatCategories | uppercase }}
+          </h4>
+          <h4 class="event-category" *ngIf="type === 'event'">
+            CONCERT - {{ getUniqueCategoriesFromEvent(item) | formatCategories | uppercase }}
+          </h4>
+
+          <h4 class="event-list" *ngIf="type === 'artist' && item.events">
+            Event(s) upcoming:
+            <span *ngFor="let event of item.events; let i = index">
+              {{ event.name }}<span *ngIf="i < item.events.length - 1">, </span>
+            </span>
+          </h4>
+          <h4 class="event-category" *ngIf="type === 'event'">
+            Artist(s): {{ item.artist | formatArtists }}
+          </h4>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

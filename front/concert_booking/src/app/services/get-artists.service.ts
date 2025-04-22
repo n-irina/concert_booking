@@ -19,4 +19,10 @@ export class GetArtistsService {
     return this.http.get<Api<Artist>>(this.API_URL + "/artists");
 
   }
+
+  getArtistById(id: number): Observable<Artist>{
+
+    return this.http.get<Artist>(this.API_URL + "/artists/" +id);
+
+  }
 }

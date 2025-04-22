@@ -1,0 +1,81 @@
+.card-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  padding: 1rem;
+
+  .card {
+    display: flex;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: scale(1.01);
+    }
+
+    .card-body {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+
+      img {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+
+      .card-text {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        .card-title {
+          margin-bottom: 0.5rem;
+
+          .card-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin: 0;
+            cursor: pointer;
+            color: #333;
+          }
+        }
+
+        .info-content {
+          display: flex;
+          flex-direction: column;
+          gap: 0.3rem;
+
+          .concert-type,
+          .event-list,
+          .event-category {
+            font-size: 0.95rem;
+            color: #555;
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .card-body {
+      flex-direction: column;
+      align-items: center;
+
+      img {
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .card-text {
+        align-items: center;
+        text-align: center;
+      }
+    }
+  }
+}
