@@ -1,3 +1,4 @@
+<app-header></app-header>
 <div class="session-container" *ngIf="session && event && hallName && hall">
   <div class="card-body">
     <!-- Titre + prix -->
@@ -34,7 +35,18 @@
         </div>
       </div>
     </div>
+    <div class="session-venue-img">
+      <img [src]="'https://localhost:8000/media/' + hall.picture_path" alt="hall image">
+      <button class="btn-info" (click)="showReservation()">Reserve</button>
+    </div>
+    <div class="reservation-info" *ngIf="showResa">
+      <app-reservation-form
+        [sessions]="session"
+        (reservationConfirmed)="handleReservation($event)">
+      </app-reservation-form>
 
+
+    </div>
     <!-- Overlay -->
     <div class="overlay" *ngIf="showInfo" (click)="closeInformation()"></div>
 
@@ -69,10 +81,11 @@
         <strong>Placement and price</strong>
         <div class="placement-price">
           <div class="placement" *ngFor="let seatType of session[0].sessionSeatTypes">
-          {{ seatType.seat_type.name }}: {{ seatType.seat_type.description }} ({{ seatType.price }}$)
+          {{ seatType.seat_type.name }}: {{ seatType.seat_type.description }}
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+<app-footer></app-footer>

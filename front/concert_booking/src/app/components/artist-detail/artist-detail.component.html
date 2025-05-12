@@ -1,1 +1,18 @@
-<p>artist-detail works!</p>
+<app-header></app-header>
+<div class="container" *ngIf="artist">
+  <div class="artist-image">
+    <img [src]="'https://localhost:8000/media/' + artist.image_path" alt="artist picture" />
+  </div>
+  <div class="artist-details">
+    <div class="artist-info">
+      <h2 class="artist-name">{{ artist.nickname }}</h2>
+      <p class="artist-category">CATEGORY - {{ artist.category | formatCategories | uppercase }}</p>
+      <p class="artist-description">{{ artist.description }}</p>
+    </div>
+    <div class="artist-event" *ngIf="events">
+      <h2 class="hall-event-info">Events upcoming</h2>
+      <app-card-list [items]="events" type="event"></app-card-list>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

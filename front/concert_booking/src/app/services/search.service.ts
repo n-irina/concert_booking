@@ -15,6 +15,7 @@ export class SearchService {
         ...res.events.map((e: any) => ({ id: e.id, label: e.name, type: 'event' })),
         ...res.artists.map((a: any) => ({ id: a.id, label: a.nickname, type: 'artist' })),
         ...res.categories.map((c: any) => ({ id: c.id, label: c.name, type: 'category' })),
+        ...res.halls.map((h: any) => ({ id: h.id, label: h.name, type: 'hall'})),
       ])
     );
   }

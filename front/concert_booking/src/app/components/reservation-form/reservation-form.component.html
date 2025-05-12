@@ -1,0 +1,50 @@
+<div class="reservation-form" *ngIf="sessions.length">
+  <h4 class="reservation-title">Select a time on</h4>
+
+  <!-- Choix de la session -->
+  <select class="form-control" (change)="onSelectSession($any($event.target).value)">
+    <option *ngFor="let s of sessions" [value]="s.id" [selected]="s.id === selectedSession?.id">
+      {{ s.date_time | date: 'fullDate' }} at {{ s.date_time | date: 'shortTime' }}
+    </option>
+  </select>
+
+  <!-- Choix du seat type -->
+  <div class="seat-types" *ngIf="selectedSession?.sessionSeatTypes?.length && selectedSession">
+    <h5>Select a seat type:</h5>
+    <div class="seat-option" *ngFor="let seat of selectedSession.sessionSeatTypes">
+      <label class="seat-label" for="seat-type">
+        <input
+          type="radio"
+          name="seatType"
+          [value]="seat.seat_type"
+          [(ngModel)]="seat.seat_type.id"
+        />
+        {{ seat.seat_type.name }} - {{ seat.seat_type.description }} ({{ seat.price }}$)
+      </label>
+
+      <!-- Sélection du nombre de places -->
+      <select class="quantity-select" [(ngModel)]="seatQuantities[seat.seat_type.id]">
+        <option *ngFor="let qty of quantities" [value]="qty">{{ qty }}</option>
+      </select>
+      <!-- Résumé -->
+      <div class="summary" *ngIf="seat.seat_type.id && seatQuantities[seat.seat_type.id]">
+        <h5>Your selection:</h5>
+        <ng-container *ngIf="seat">
+          <p>Seat type: {{ seat.seat_type.name }}</p>
+          <p>Quantity: {{ seatQuantities[seat.seat_type.id] }}</p>
+          <p>Total: {{ seat.price * seatQuantities[seat.seat_type.id] }}$</p>
+        </ng-container>
+      </div>
+    </div>
+
+
+  </div>
+
+
+  <button
+    class="btn btn-primary"
+    [disabled]="!selectedSeatTypeId || !seatQuantities[selectedSeatTypeId]"
+    (click)="confirmReservation()">
+    Confirm Reservation
+  </button>
+</div>

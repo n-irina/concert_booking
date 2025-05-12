@@ -16,64 +16,64 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
 
         $events = [
             [
-                "artist" => "beyonce",
+                "artist" => "Beyoncé",
                 "name" => "Renaissance Tour",
                 "description" => "The Renaissance World Tour was the ninth concert tour by American singer and songwriter Beyoncé. Her highest-grossing tour to date, it was staged in support of her seventh studio album, Renaissance (2022).",
                 "picture_path" => "concert_beyonce.jpg",
             ],
             [
                 "artist" => [
-                    "ne-yo",
-                    "mario"
+                    "Ne-Yo",
+                    "Mario"
                 ],
                 "name" => "Champagne & Roses Tour",
                 "description" => "The artist known for his hits such as 'Closer', 'Miss Independent' and 'Sexy Love', also participated in the writing of 'Let Me Love You' by Mario who will be his guest on the 'Champagne & Roses Tour'",
                 "picture_path" => "concert_neyo_mario.jpg"
             ],
             [
-                "artist" => "usher",
+                "artist" => "Usher",
                 "name" => "Past, Present, Future Tour",
                 "description" => "Known for his hits 'yeah!', 'Love in This Club' or his great classic from 20 years ago 'My Boo' featuring Alicia Keys, Usher promises to take us on a journey between his past, his present but also his future",
                 "picture_path" => "concert_usher.jpg"
             ],
             [
-                "artist" => "chris brown",
+                "artist" => "Chris Brown",
                 "name" => "Exclusive Tour",
                 "description" => "After releasing his 'exclusive' album, Chris Brown went on tour to promote it",
                 "picture_path" => "concert_cb.jpg"
             ],
             [
-                "artist" => "ronisia",
+                "artist" => "Ronisia",
                 "name" => "Ronisia",
                 "description" => "After releasing her eponymous album, Ronisia offers us an exclusive concert",
                 "picture_path" => "concert_ronisia.jpg"
             ],
             [
-                "artist" => "lewis capaldi",
+                "artist" => "Lewis Capaldi",
                 "name" => "Divinely Uninspired to a Hellish Extent Tour",
                 "description" => "Join Lewis Capaldi for a European tour",
                 "picture_path" => "concert_lewis.jpg"
             ],
             [
-                "artist" => "ed sheeran",
+                "artist" => "Ed Sheeran",
                 "name" => "The Mathematics Tour",
                 "description" => "The +-=÷× Tour (pronounced The Mathematics Tour) is the ongoing fourth concert tour by English singer-songwriter Ed Sheeran.",
                 "picture_path" => "concert_ed.jpg"
             ],
             [
-                "artist" => "rihanna",
+                "artist" => "Rihanna",
                 "name" => "Anti World Tour",
                 "description" => "The Anti World Tour was the seventh concert tour by Barbadian singer Rihanna, in support of her eighth studio album, Anti (2016).",
                 "picture_path" => "concert_rihanna.jpg"
             ],
             [
-                "artist" => "sam smith",
+                "artist" => "Sam Smith",
                 "name" => "Sam Smith unique concert",
                 "description" => "Meet Sam Smith for a unique concert",
                 "picture_path" => "concert_sam.jpg"
             ],
             [
-                "artist" => "jp cooper",
+                "artist" => "Jp Cooper",
                 "name" => "Jp Cooper concert",
                 "description" => "An enchanting voice, on the border between soul and RnB tinged with folk, the English John Paul Cooper wants to give concerts in intimate places, as close as possible to his fans.",
                 "picture_path" => "concert_jp.jpg"

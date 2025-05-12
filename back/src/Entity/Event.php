@@ -165,4 +165,14 @@ class Event
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return $this->getName();
+    }
+    
+    public function getArtistsString(): string
+    {
+        return implode(', ', $this->artist->map(fn($a) => $a->getNickname())->toArray());
+    }
 }

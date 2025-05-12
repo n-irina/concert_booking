@@ -6,13 +6,17 @@ import { Api } from '../../models/api.model';
 import { NgFor, NgIf, UpperCasePipe } from '@angular/common';
 import { FormatCategoriesPipe } from '../../pipes/format-categories.pipe';
 import { CardListComponent } from "../card-list/card-list.component";
+import { HeaderComponent } from "../header/header.component";
+import { FooterComponent } from "../footer/footer.component";
 
 @Component({
   selector: 'app-artist-list',
   standalone: true,
   imports: [
     NgIf,
-    CardListComponent
+    CardListComponent,
+    HeaderComponent,
+    FooterComponent
 ],
   templateUrl: './artist-list.component.html',
   styleUrl: './artist-list.component.scss'

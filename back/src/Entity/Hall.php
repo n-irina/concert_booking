@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Get;
 use App\Repository\HallRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -10,28 +12,37 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: HallRepository::class)]
-#[ApiResource()]
+#[ApiResource(
+    normalizationContext: [
+        "groups" => ["hall_read"],
+    ],
+    operations:[
+        new Get(),
+        new GetCollection()
+    ]
+)]
 class Hall
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["hall_read"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["event_read", "session_read"])]
+    #[Groups(["event_read", "session_read", "hall_read"])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["session_read"])]
+    #[Groups(["session_read", "hall_read"])]
     private ?string $address = null;
 
     #[ORM\Column]
-    #[Groups(["session_read"])]
+    #[Groups(["session_read", "hall_read"])]
     private ?int $capacity = null;
 
     #[ORM\Column(length: 355)]
-    #[Groups(["session_read"])]
+    #[Groups(["session_read", "hall_read"])]
     private ?string $description = null;
 
     /**
@@ -47,6 +58,7 @@ class Hall
     private Collection $hallSeatTypes;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["hall_read", "session_read"])]
     private ?string $picture_path = null;
 
     public function __construct()
@@ -178,5 +190,10 @@ class Hall
         $this->picture_path = $picture_path;
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->getName();
     }
 }

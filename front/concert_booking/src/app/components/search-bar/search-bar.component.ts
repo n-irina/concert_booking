@@ -15,7 +15,7 @@ import { SearchService } from '../../services/search.service';
 export class SearchBarComponent {
   searchText = '';
   isTyping = false;
-  suggestions: { id: number; label: string; type: 'event' | 'artist' | 'category' }[] = [];
+  suggestions: { id: number; label: string; type: 'event' | 'artist' | 'category' | 'hall' }[] = [];
   suggestionsVisible = false;
 
   private searchSubject = new Subject<string>();
@@ -78,6 +78,8 @@ export class SearchBarComponent {
       this.router.navigate(['/artist', item.id]);
     } else if (item.type === 'category') {
       this.router.navigate(['/category', item.id]);
+    } else if (item.type === 'hall') {
+      this.router.navigate(['/hall', item.id]);
     }
   }
 }

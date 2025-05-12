@@ -10,6 +10,10 @@ import { Category } from '../../models/category.model';
 import { EventSharedService } from '../../services/event-shared.service';
 import { FormatArtistsPipe } from '../../pipes/format-artists.pipe';
 import { Hall } from '../../models/hall.model';
+import { FormsModule } from '@angular/forms';
+import { HeaderComponent } from "../header/header.component";
+import { FooterComponent } from "../footer/footer.component";
+import { ReservationFormComponent } from '../reservation-form/reservation-form.component';
 
 @Component({
   selector: 'app-session-detail',
@@ -22,19 +26,25 @@ import { Hall } from '../../models/hall.model';
     FormatCategoriesPipe,
     UpperCasePipe,
     FormatArtistsPipe,
-  ],
+    FormsModule,
+    HeaderComponent,
+    FooterComponent,
+    ReservationFormComponent,
+],
   templateUrl: './session-detail.component.html',
   styleUrl: './session-detail.component.scss'
 })
 export class SessionDetailComponent implements OnInit{
 
-  session: Session[] | undefined;
+  session: Session[] = [];
   event: Event_api | undefined;
   hallName: string | null = null;
   categories: Category[] = [];
   minimum_price: number = 0;
   hall: Hall | undefined;
   showInfo: boolean = false;
+  showResa: boolean = false;
+  selectedSession: Session | null = null;
 
   constructor(
     private session_service: GetSessionsService,
@@ -56,7 +66,6 @@ export class SessionDetailComponent implements OnInit{
           this.categories = this.shared_service.getCategories();
           this.minimum_price = this.getMinimumPrice(this.session);
           this.hall = this.session[0].hall;
-          console.log("detail session",this.categories)
         },
         (error) => {
           console.error("Error fetching future events", error);
@@ -84,4 +93,20 @@ export class SessionDetailComponent implements OnInit{
   closeInformation(){
     this.showInfo = false;
   }
+
+  showReservation(){
+    this.showResa = true;
+  }
+
+  onSelectSession(sessionId: number): void {
+    this.selectedSession = this.session.find(s => s.id === +sessionId) || null;
+  }
+
+  handleReservation(reservation: { sessionId: number, seatTypeId: number, quantity: number }) {
+    console.log('Reservation done:', reservation);
+    // Tu peux ensuite envoyer la réservation à ton API ou autre
+  }
+
+
+
 }

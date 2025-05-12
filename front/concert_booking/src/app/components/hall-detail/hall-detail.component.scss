@@ -1,0 +1,86 @@
+.container {
+  margin-top: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 1rem;
+
+  .hall-img {
+    img {
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+  }
+
+  .info-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    .hall-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      .hall-name {
+        font-size: 1.8rem;
+        font-weight: bold;
+      }
+
+      .hall-address {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1rem;
+        color: #444;
+
+        svg {
+          width: 16px;
+          height: 16px;
+          fill: #666;
+        }
+      }
+
+      .hall-description {
+        font-size: 1rem;
+        color: #555;
+      }
+    }
+
+    .hall-event {
+      .hall-event-info {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
+
+  // 💻 Desktop layout
+  @media screen and (min-width: 768px) {
+    flex-direction: row;
+    align-items: flex-start;
+
+    .hall-img {
+      width: 45%;
+
+      img {
+        height: 50vh;
+        width: 100%;
+        object-fit: cover;
+        border-radius: 12px;
+      }
+    }
+
+    .info-content {
+      width: 55%;
+      padding-left: 2rem;
+    }
+
+    .hall-event {
+      margin-top: 2rem;
+    }
+  }
+}

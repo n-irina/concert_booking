@@ -25,7 +25,7 @@ class HallFixtures extends Fixture
                 "address" => "23 rue Boyer 75020 Paris",
                 "capacity" => 500,
                 "descritpion" => "Is La Maroquinerie one of the best concert halls in Paris? The question deserves to be asked as the hall hidden on the heights of Ménilmontant has assets to make a belote player cry.",
-                "picture_path" => "maronquinerie.jpg"
+                "picture_path" => "maroquinerie.jpg"
             ],
             [
                 "name" => "Olympia",

@@ -5,6 +5,7 @@ namespace App\Controller\Api;
 use App\Repository\ArtistRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\EventRepository;
+use App\Repository\HallRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +18,8 @@ class SearchController extends AbstractController
         Request $request,
         EventRepository $eventRepository,
         ArtistRepository $artistRepository,
-        CategoryRepository $categoryRepository
+        CategoryRepository $categoryRepository,
+        HallRepository $hallRepository,
     ): JsonResponse {
         $query = $request->query->get('q', '');
 
@@ -26,6 +28,7 @@ class SearchController extends AbstractController
                 'events' => [],
                 'artists' => [],
                 'categories' => [],
+                'halls' => [],
             ]);
         }
 
@@ -51,6 +54,13 @@ class SearchController extends AbstractController
             ->getQuery()
             ->getResult();
 
+        $halls = $hallRepository->createQueryBuilder('h')
+            ->where('LOWER(h.name) LIKE :q')
+            ->setParameter('q', '%' . strtolower($query) . '%')
+            ->setMaxResults(5)
+            ->getQuery()
+            ->getResult();
+
         // Normalisation (ou transformer manuellement selon ton besoin)
         $data = [
             'events' => array_map(fn($e) => [
@@ -67,6 +77,11 @@ class SearchController extends AbstractController
                 'id' => $c->getId(),
                 'name' => $c->getName(),
             ], $categories),
+
+            'halls' => array_map(fn($h) => [
+                'id' => $h->getId(),
+                'name' => $h->getName(),
+            ], $halls),
         ];
 
         return $this->json($data);

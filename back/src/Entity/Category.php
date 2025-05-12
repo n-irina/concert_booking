@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Get;
 use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -10,7 +12,15 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
-#[ApiResource()]
+#[ApiResource(
+    normalizationContext: [
+        "groups" => ["category_read"],
+    ],
+    operations:[
+        new Get(),
+        new GetCollection()
+    ]
+)]
 class Category
 {
     #[ORM\Id]
@@ -19,13 +29,14 @@ class Category
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["event_read", "session_read", "artist_read"])]
+    #[Groups(["event_read", "session_read", "artist_read", "category_read"])]
     private ?string $name = null;
 
     /**
      * @var Collection<int, Artist>
      */
     #[ORM\ManyToMany(targetEntity: Artist::class, mappedBy: 'category')]
+    #[Groups(["category_read"])]
     private Collection $artists;
 
     public function __construct()
@@ -75,5 +86,10 @@ class Category
         }
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->getName();
     }
 }

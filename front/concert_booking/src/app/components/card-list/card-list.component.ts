@@ -3,6 +3,8 @@ import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormatArtistsPipe } from '../../pipes/format-artists.pipe';
 import { FormatCategoriesPipe } from '../../pipes/format-categories.pipe';
+import { Event_api } from '../../models/event_api.model';
+import { Category } from '../../models/category.model';
 
 @Component({
   selector: 'app-card-list',
@@ -20,23 +22,26 @@ import { FormatCategoriesPipe } from '../../pipes/format-categories.pipe';
 export class CardListComponent {
 
   @Input() items: any[] = [];
-  @Input() type: 'artist' | 'event' = 'artist';
+  @Input() type: 'artist' | 'event' | 'hall'= 'artist';
 
   constructor(private router: Router) {}
 
   goToDetails(id: number) {
     if (this.type === 'artist') {
       this.router.navigate(['/artist', id]);
-    } else {
+    } else if (this.type === 'event') {
       this.router.navigate(['/concert', id]);
+    }
+    else {
+      this.router.navigate(['/hall', id]);
     }
   }
 
-  getUniqueCategoriesFromEvent(item: any): any[] {
-    if (!item?.artist) return [];
-    const allCategories = item.artist.flatMap((a: any) => a.category);
-    const map = new Map<number, any>();
-    allCategories.forEach((c: any) => map.set(c.id, c));
-    return Array.from(map.values());
+  getAllCategoriesFromEvent(item: Event_api): Category[] {
+    return Array.isArray(item?.artist)
+      ? item.artist.flatMap(a => Array.isArray(a.category) ? a.category : [])
+      : [];
   }
+
+
 }

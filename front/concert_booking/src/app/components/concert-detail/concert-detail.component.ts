@@ -9,6 +9,8 @@ import { Category } from '../../models/category.model';
 import { FormatCategoriesPipe } from '../../pipes/format-categories.pipe';
 import { EventSharedService } from '../../services/event-shared.service';
 import { Hall } from '../../models/hall.model';
+import { HeaderComponent } from "../header/header.component";
+import { FooterComponent } from "../footer/footer.component";
 
 @Component({
   selector: 'app-concert-detail',
@@ -21,7 +23,9 @@ import { Hall } from '../../models/hall.model';
     DatePipe,
     UpperCasePipe,
     FormatCategoriesPipe,
-  ],
+    HeaderComponent,
+    FooterComponent
+],
   templateUrl: './concert-detail.component.html',
   styleUrl: './concert-detail.component.scss'
 })
@@ -68,7 +72,7 @@ export class ConcertDetailComponent implements OnInit{
         this.event = res;
         this.grouped_sessions = this.groupSessionsByHall(this.event?.sessions);
         this.minimum_price = this.calculateMinPricesByHall(this.grouped_sessions);
-        this.event_category = this.getUniqueCategories(this.event);
+        this.event_category = this.getAllCategories(this.event);
         this.shared_service.setCategories(this.event_category);
       },
       (error) => {
@@ -115,13 +119,8 @@ export class ConcertDetailComponent implements OnInit{
   }
 
 
-  getUniqueCategories(event: Event_api): Category[] {
-    const allCategories = event.artist.flatMap(a => a.category);
-    const unique = new Map<number, Category>();
-    for (const c of allCategories) {
-      unique.set(c.id, c);
-    }
-    return Array.from(unique.values());
+  getAllCategories(event: Event_api): Category[] {
+    return event.artist.flatMap(a => a.category);
   }
 
   goToDetails(hall: string, eventId: string): void{

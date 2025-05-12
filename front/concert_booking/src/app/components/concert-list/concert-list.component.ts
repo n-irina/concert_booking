@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { Api } from '../../models/api.model';
 import { NgIf } from '@angular/common';
 import { CardListComponent } from '../card-list/card-list.component';
+import { HeaderComponent } from "../header/header.component";
+import { FooterComponent } from "../footer/footer.component";
 
 @Component({
   selector: 'app-concert-list',
@@ -12,7 +14,9 @@ import { CardListComponent } from '../card-list/card-list.component';
   imports: [
     NgIf,
     CardListComponent,
-  ],
+    HeaderComponent,
+    FooterComponent
+],
   templateUrl: './concert-list.component.html',
   styleUrl: './concert-list.component.scss'
 })

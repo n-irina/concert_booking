@@ -30,7 +30,7 @@ class Artist
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["event_read", "session_read", "artist_read"])]
+    #[Groups(["event_read", "session_read", "artist_read", "category_read"])]
     private ?string $nickname = null;
 
     #[ORM\Column(length: 355)]
@@ -152,4 +152,15 @@ class Artist
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return $this->getNickname();
+    }
+
+    public function getCategoriesString(): string
+    {
+        return implode(', ', $this->category->map(fn($c) => $c->getName())->toArray());
+    }
+
 }

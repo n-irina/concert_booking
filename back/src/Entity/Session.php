@@ -13,6 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\PseudoTypes\StringValue;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: SessionRepository::class)]
@@ -166,5 +167,20 @@ class Session
         }
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return 'session n°'.$this->getId().' of '.$this->getEvent()->getName();
+    }
+
+    public function getEventString(): string
+    {
+        return $this->getEvent()->getName();
+    }
+
+    public function getHallString(): string
+    {
+        return $this->getHall()->getName();
     }
 }
