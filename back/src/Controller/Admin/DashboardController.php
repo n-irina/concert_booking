@@ -6,7 +6,10 @@ use App\Entity\Artist;
 use App\Entity\Category;
 use App\Entity\Event;
 use App\Entity\Hall;
+use App\Entity\HallSeatType;
+use App\Entity\SeatType;
 use App\Entity\Session;
+use App\Entity\SessionSeatType;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -18,9 +21,6 @@ class DashboardController extends AbstractDashboardController
 {
     public function index(): Response
     {
-        // Option 3. You can render some custom template to display a proper dashboard with widgets, etc.
-        // (tip: it's easier if your template extends from @EasyAdmin/page/content.html.twig)
-        
         return $this->render('admin/dashboard.html.twig');
     }
 
@@ -31,12 +31,28 @@ class DashboardController extends AbstractDashboardController
     }
 
     public function configureMenuItems(): iterable
-    {
-        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        yield MenuItem::linkToCrud('Category', 'fas fa-tags', Category::class);
-        yield MenuItem::linkToCrud('Artist', 'fas fa-user', Artist::class);
-        yield MenuItem::linkToCrud('Event', 'fas fa-music', Event::class);
-        yield MenuItem::linkToCrud('Hall', 'fas fa-building', Hall::class);
-        yield MenuItem::linkToCrud('Session', 'fas fa-calendar-alt', Session::class);
-    }
+{
+    yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+
+    //Sub Menu principal
+    yield MenuItem::subMenu('Concerts management', 'fas fa-music')->setSubItems([
+        MenuItem::linkToCrud('Events', 'fas fa-music', Event::class),
+        MenuItem::linkToCrud('Artists', 'fas fa-user', Artist::class),
+        MenuItem::linkToCrud('Sessions', 'fas fa-calendar-alt', Session::class),
+    ]);
+
+    // Sub Menu Place
+    yield MenuItem::subMenu('Place', 'fas fa-map-marker-alt')->setSubItems([
+        MenuItem::linkToCrud('Hall', 'fas fa-building', Hall::class),
+        MenuItem::linkToCrud('Hall Seat Types', 'fas fa-couch', HallSeatType::class),
+    ]);
+
+    // Sub Menu Configuration
+    yield MenuItem::subMenu('Configuration', 'fas fa-cogs')->setSubItems([
+        MenuItem::linkToCrud('Categories', 'fas fa-tags', Category::class),
+        MenuItem::linkToCrud('Seat Types', 'fas fa-chair', SeatType::class),
+        MenuItem::linkToCrud('Sessions/Seat Types', 'fas fa-chair', SessionSeatType::class),
+    ]);
+}
+
 }

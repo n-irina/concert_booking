@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Session;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -14,6 +15,21 @@ class SessionRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Session::class);
+    }
+
+    /**
+     * Retourne les sessions liées à un event donné
+     */
+    public function createQueryBuilderFilteredByEventId(?int $eventId): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('s');
+
+        if ($eventId !== null) {
+            $qb->andWhere('s.event = :eventId')
+               ->setParameter('eventId', $eventId);
+        }
+
+        return $qb;
     }
 
     //    /**

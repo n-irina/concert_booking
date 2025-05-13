@@ -8,6 +8,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
@@ -31,7 +32,12 @@ class ArtistCrudController extends AbstractCrudController
                 ->setLabel('Categories')
                 ->onlyOnForms(), 
             TextField::new('categoriesString', 'Categories')
-                ->onlyOnIndex()
+                ->onlyOnIndex(),
+            ImageField::new('image_path')
+                ->setBasePath('/media')
+                ->setUploadDir('public/media')               
+                ->setUploadedFileNamePattern('[randomhash].[extension]') 
+                ->setRequired(false),
             
         ];
     }

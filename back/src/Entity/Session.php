@@ -171,7 +171,7 @@ class Session
 
     public function __toString()
     {
-        return 'session n°'.$this->getId().' of '.$this->getEvent()->getName();
+        return 'session n°'.$this->getId().' for '.$this->getEvent()->getName();
     }
 
     public function getEventString(): string
