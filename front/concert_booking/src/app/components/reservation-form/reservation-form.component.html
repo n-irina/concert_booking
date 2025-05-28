@@ -10,40 +10,47 @@
 
   <!-- Choix du seat type -->
   <div class="seat-types" *ngIf="selectedSession?.sessionSeatTypes?.length && selectedSession">
-    <h5>Select a seat type:</h5>
+    <h5>Select your seats:</h5>
     <div class="seat-option" *ngFor="let seat of selectedSession.sessionSeatTypes">
-      <label class="seat-label" for="seat-type">
-        <input
-          type="radio"
-          name="seatType"
-          [value]="seat.seat_type"
-          [(ngModel)]="seat.seat_type.id"
-        />
-        {{ seat.seat_type.name }} - {{ seat.seat_type.description }} ({{ seat.price }}$)
-      </label>
+      <div class="seat-selection">
+        <label class="seat-label" [class.selected]="selectedSeatTypeId === seat.seat_type.id">
+          <input
+            type="checkbox"
+            name="seat_type"
+            id="seat.seat_type.id + 'selected'"
+            value="seat.seat_type.id"
+            [checked]="selectedSeatTypeId === seat.seat_type.id"
+            (click)="onSeatTypeChange(seat.seat_type.id)"
+          />
+          {{ seat.seat_type.name }} - {{ seat.seat_type.description }} ({{ seat.price }}$)
+        </label>
+      </div>
 
       <!-- Sélection du nombre de places -->
-      <select class="quantity-select" [(ngModel)]="seatQuantities[seat.seat_type.id]">
+      <select
+        class="quantity-select"
+        [disabled]="selectedSeatTypeId !== seat.seat_type.id"
+        [ngModel]="getQuantityForSeat(seat.seat_type.id)"
+        (ngModelChange)="updateQuantity(seat.seat_type.id, $event)">
         <option *ngFor="let qty of quantities" [value]="qty">{{ qty }}</option>
       </select>
-      <!-- Résumé -->
-      <div class="summary" *ngIf="seat.seat_type.id && seatQuantities[seat.seat_type.id]">
-        <h5>Your selection:</h5>
-        <ng-container *ngIf="seat">
-          <p>Seat type: {{ seat.seat_type.name }}</p>
-          <p>Quantity: {{ seatQuantities[seat.seat_type.id] }}</p>
-          <p>Total: {{ seat.price * seatQuantities[seat.seat_type.id] }}$</p>
-        </ng-container>
+
+      <!-- Résumé par type de siège -->
+      <div class="seat-summary" *ngIf="selectedSeatTypeId === seat.seat_type.id && seatQuantities[seat.seat_type.id] > 0">
+        <p>{{ seatQuantities[seat.seat_type.id] }} x {{ seat.seat_type.name }}: {{ seat.price * seatQuantities[seat.seat_type.id] }}$</p>
       </div>
     </div>
 
-
+    <!-- Résumé total -->
+    <div class="total-summary" *ngIf="totalAmount > 0">
+      <h5>Total reservation:</h5>
+      <p class="total-amount">Total: {{ totalAmount }}$</p>
+    </div>
   </div>
-
 
   <button
     class="btn btn-primary"
-    [disabled]="!selectedSeatTypeId || !seatQuantities[selectedSeatTypeId]"
+    [disabled]="totalAmount === 0"
     (click)="confirmReservation()">
     Confirm Reservation
   </button>
