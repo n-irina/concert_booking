@@ -14,9 +14,12 @@
       </p>
       <p class="hall-description">{{ hall.description }}</p>
     </div>
-    <div class="hall-event" *ngIf="events">
+    <div class="hall-event" *ngIf="filteredEvents.length > 0">
       <h2 class="hall-event-info">Events upcoming</h2>
-      <app-card-list [items]="events" type="event"></app-card-list>
+      <app-card-list [items]="filteredEvents" type="event" [sessions]="sessions"></app-card-list>
+    </div>
+    <div class="no-events" *ngIf="filteredEvents.length === 0">
+      <p>No upcoming events in this hall.</p>
     </div>
   </div>
 </div>

@@ -5,6 +5,7 @@ import { FormatArtistsPipe } from '../../pipes/format-artists.pipe';
 import { FormatCategoriesPipe } from '../../pipes/format-categories.pipe';
 import { Event_api } from '../../models/event_api.model';
 import { Category } from '../../models/category.model';
+import { Session } from '../../models/session.model';
 
 @Component({
   selector: 'app-card-list',
@@ -23,6 +24,7 @@ export class CardListComponent {
 
   @Input() items: any[] = [];
   @Input() type: 'artist' | 'event' | 'hall'= 'artist';
+  @Input() sessions?: Session[];
 
   constructor(private router: Router) {}
 
@@ -30,7 +32,16 @@ export class CardListComponent {
     if (this.type === 'artist') {
       this.router.navigate(['/artist', id]);
     } else if (this.type === 'event') {
-      this.router.navigate(['/concert', id]);
+      if (this.sessions) {
+        const session = this.sessions.find(s => s.event.id === id);
+        if (session) {
+          this.router.navigate(['/session', session.id]);
+        } else {
+          this.router.navigate(['/concert', id]);
+        }
+      } else {
+        this.router.navigate(['/concert', id]);
+      }
     }
     else {
       this.router.navigate(['/hall', id]);
@@ -42,6 +53,5 @@ export class CardListComponent {
       ? item.artist.flatMap(a => Array.isArray(a.category) ? a.category : [])
       : [];
   }
-
 
 }

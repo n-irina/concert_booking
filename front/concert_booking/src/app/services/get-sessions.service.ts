@@ -15,10 +15,15 @@ export class GetSessionsService {
 
   constructor(private http: HttpClient) { }
 
-  getHallEventSessions(hallName: string, eventId: string): Observable<Api<Session>>{
-
-    return this.http.get<Api<Session>>(this.API_URL + "/sessions?hall=" + hallName + "&event=" +eventId);
-
+  getHallEventSessions(hallId: string, eventId: string): Observable<Api<Session>> {
+    const url = `${this.API_URL}/sessions?event=${eventId}`;
+    console.log("Requesting sessions from:", url);
+    return this.http.get<Api<Session>>(url);
   }
 
+  getSessionById(sessionId: string): Observable<Session> {
+    const url = `${this.API_URL}/sessions/${sessionId}`;
+    console.log("Requesting session by ID from:", url);
+    return this.http.get<Session>(url);
+  }
 }

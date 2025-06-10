@@ -33,10 +33,10 @@ export class GetEventsService {
 
   }
 
-  getHallEvents(hall: Hall): Observable<Api<Event_api>>{
-
-    return this.http.get<Api<Event_api>>(this.API_URL + "/events?hall=" + hall.name);
-
+  getHallEvents(hall: Hall): Observable<Api<Event_api>> {
+    const url = `${this.API_URL}/events?hall=${encodeURIComponent(hall.name)}&future=true`;
+    console.log("Requesting hall events from:", url);
+    return this.http.get<Api<Event_api>>(url);
   }
 
   getArtistEvents(id: number): Observable<Api<Event_api>>{

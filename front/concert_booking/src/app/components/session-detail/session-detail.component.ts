@@ -54,23 +54,26 @@ export class SessionDetailComponent implements OnInit{
   ){ }
 
   ngOnInit(): void {
+    const sessionId = this.activatedRoute.snapshot.params['sessionId'];
 
-    this.hallName = this.activatedRoute.snapshot.queryParamMap.get("hall");
-    const id: string | null = this.activatedRoute.snapshot.queryParamMap.get("eventId");
-
-    if(this.hallName && id){
-      this.session_service.getHallEventSessions(this.hallName, id).subscribe(
-        (res: Api<Session>) => {
-          this.session = res["member"];
-          this.event = this.session[0].event;
+    if (sessionId) {
+      this.session_service.getSessionById(sessionId).subscribe(
+        (res: Session) => {
+          this.session = [res]; // Wrap in array since component expects array
+          this.event = res.event;
           this.categories = this.shared_service.getCategories();
           this.minimum_price = this.getMinimumPrice(this.session);
-          this.hall = this.session[0].hall;
+          this.hall = res.hall;
+          this.hallName = this.hall?.name || null;
         },
         (error) => {
-          console.error("Error fetching future events", error);
+          console.error("Error fetching session", error);
+          this.router.navigate(['/']);
         }
       );
+    } else {
+      console.error("Missing session ID");
+      this.router.navigate(['/']);
     }
   }
 
@@ -106,7 +109,5 @@ export class SessionDetailComponent implements OnInit{
     console.log('Reservation done:', reservation);
     // Tu peux ensuite envoyer la réservation à ton API ou autre
   }
-
-
 
 }

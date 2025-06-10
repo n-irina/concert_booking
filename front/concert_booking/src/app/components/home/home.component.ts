@@ -7,15 +7,14 @@ import { Api } from '../../models/api.model';
 import { HomeBannerComponent } from "../home-banner/home-banner.component";
 import { Router } from '@angular/router';
 import { HomePastEventComponent } from "../home-past-event/home-past-event.component";
-
+import { LandingPageComponent } from "../landing-page/landing-page.component";
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [
-    HeaderComponent,
-    FooterComponent,
     HomeBannerComponent,
-    HomePastEventComponent
+    HomePastEventComponent,
+    LandingPageComponent,
 ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
