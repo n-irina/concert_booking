@@ -13,6 +13,9 @@
       <h2 class="hall-event-info">Events upcoming</h2>
       <app-card-list [items]="events" type="event"></app-card-list>
     </div>
+    <div class="no-events" *ngIf="events.length === 0">
+      <p>No upcoming events for this artist.</p>
+    </div>
   </div>
 </div>
 <app-footer></app-footer>

@@ -7,6 +7,8 @@ import { ArtistListComponent } from './components/artist-list/artist-list.compon
 import { ArtistDetailComponent } from './components/artist-detail/artist-detail.component';
 import { HallListComponent } from './components/hall-list/hall-list.component';
 import { HallDetailComponent } from './components/hall-detail/hall-detail.component';
+import { CategoryListComponent } from './components/category-list/category-list.component';
+import { CategoryDetailComponent } from './components/category-detail/category-detail.component';
 
 export const routes: Routes = [
 
@@ -19,5 +21,10 @@ export const routes: Routes = [
   { path: "artist/:id", component: ArtistDetailComponent },
   { path: "hall", component: HallListComponent },
   { path: "hall/:id", component: HallDetailComponent },
+  { path: "category", component: CategoryListComponent },
+  { path: "category/:id", component: CategoryDetailComponent },
+  { path: "category/artist/:id", component: ArtistListComponent },
+  { path: "category/hall/:id", component: HallListComponent },
+  { path: "category/concert/:id", component: ConcertListComponent },
 
 ];

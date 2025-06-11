@@ -36,11 +36,11 @@ class Event
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["event_read", "session_read"])]
+    #[Groups(["event_read", "session_read", "category_read"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["event_read", "session_read", "artist_read"])]
+    #[Groups(["event_read", "session_read", "artist_read", "category_read"])]
     private ?string $name = null;
 
     #[ORM\Column(length: 355)]
@@ -62,7 +62,7 @@ class Event
     private Collection $sessions;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["event_read", "session_read", "artist_read"])]
+    #[Groups(["event_read", "session_read", "artist_read", "category_read"])]
     private ?string $picture_path = null;
 
     public function __construct()

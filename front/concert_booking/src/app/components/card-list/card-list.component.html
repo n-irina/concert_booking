@@ -16,11 +16,14 @@
             CONCERT - {{ getAllCategoriesFromEvent(item) | formatCategories | uppercase }}
           </h4>
 
-          <h4 class="event-list" *ngIf="type === 'artist' && item.events">
+          <h4 class="event-list" *ngIf="type === 'artist' && item.events && item.events.length > 0">
             Event(s) upcoming:
             <span *ngFor="let event of item.events; let i = index">
               {{ event.name }}<span *ngIf="i < item.events.length - 1">, </span>
             </span>
+          </h4>
+          <h4 class="no-events" *ngIf="type === 'artist' && (!item.events || item.events.length === 0)">
+            No upcoming events for this artist.
           </h4>
           <h4 class="event-category" *ngIf="type === 'event'">
             Artist(s): {{ item.artist | formatArtists }}

@@ -26,7 +26,7 @@ class Artist
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["event_read", "artist_read"])]
+    #[Groups(["event_read", "artist_read", 'category_read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -38,7 +38,7 @@ class Artist
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["artist_read"])]
+    #[Groups(["artist_read", "category_read"])]
     private ?string $image_path = null;
 
     /**
@@ -52,7 +52,7 @@ class Artist
      * @var Collection<int, Event>
      */
     #[ORM\ManyToMany(targetEntity: Event::class, mappedBy: 'artist')]
-    #[Groups(["artist_read"])]
+    #[Groups(["artist_read", "category_read"])]
     private Collection $events;
 
     public function __construct()

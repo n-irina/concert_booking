@@ -1,0 +1,21 @@
+<app-header></app-header>
+<div class="container">
+    <div class="category-artist" *ngIf="category">
+      <div class="category-artist-header">
+        <h1>Artists for {{ category.name }} category</h1>
+      </div>
+      <div class="artist-list" *ngIf="category && artists">
+        <div class="artist-item" *ngFor="let artist of artists">
+            <img [src]="'https://localhost:8000/media/' + artist.image_path" alt="Artist Image">
+            <h2>{{ artist.nickname }}</h2>
+            <div class="artist-event-list" *ngIf="hasEvents(artist.id)">
+                <app-card-list [items]="prepareEventsForCardList(artist.id)" type="event"></app-card-list>
+            </div>
+            <div class="no-events" *ngIf="!hasEvents(artist.id)">
+                No events found for this artist
+            </div>
+        </div>
+      </div>
+    </div>
+</div>
+<app-footer></app-footer>
