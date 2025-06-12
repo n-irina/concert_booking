@@ -6,10 +6,14 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
 use App\Controller\Api\MeAction;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\PasswordStrength;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[Get(
@@ -18,6 +22,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
     read: false,
     controller: MeAction::class
 )]
+#[Post(denormalizationContext: ['groups' => ['post_user']], validationContext: ['groups' => ['Default', 'post_user']])]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -27,6 +32,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
+    #[Groups(['post_user'])]
+    #[Assert\NotBlank(message: 'Email is required', groups: ['post_user'])]
+    #[Assert\Email(message: 'Invalid email format', groups: ['post_user'])]
     private ?string $email = null;
 
     /**
@@ -48,6 +56,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $booking;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['post_user'])]    
+    #[Assert\NotBlank(message: 'Password is required', groups: ['post_user'])]
     private ?string $plain_password = null;
 
     public function __construct()

@@ -13,8 +13,28 @@
           <h2>Subscribe now for more information</h2>
         </div>
         <div class="landing-page-content-subscribe-form">
-          <input type="email" placeholder="Enter your email">
-          <button>Subscribe</button>
+          <div class="form-group">
+            <div class="input-button-group">
+              <input
+                type="email"
+                [(ngModel)]="email"
+                placeholder="Enter your email"
+                [class.error]="emailError"
+                (keyup.enter)="goToSubscriptionForm()"
+              >
+              <button
+                (click)="goToSubscriptionForm()"
+                [disabled]="isLoading"
+                [class.loading]="isLoading"
+              >
+                <span *ngIf="!isLoading">Subscribe</span>
+                <span *ngIf="isLoading">Processing...</span>
+              </button>
+            </div>
+            @if (emailError) {
+              <p class="error-message">{{ emailError }}</p>
+            }
+          </div>
         </div>
       </div>
     </div>

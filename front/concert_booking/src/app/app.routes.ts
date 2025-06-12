@@ -9,6 +9,8 @@ import { HallListComponent } from './components/hall-list/hall-list.component';
 import { HallDetailComponent } from './components/hall-detail/hall-detail.component';
 import { CategoryListComponent } from './components/category-list/category-list.component';
 import { CategoryDetailComponent } from './components/category-detail/category-detail.component';
+import { LandingPageComponent } from './components/landing-page/landing-page.component';
+import { SubscriptionFormComponent } from './components/subscription-form/subscription-form.component';
 
 export const routes: Routes = [
 
@@ -26,5 +28,6 @@ export const routes: Routes = [
   { path: "category/artist/:id", component: ArtistListComponent },
   { path: "category/hall/:id", component: HallListComponent },
   { path: "category/concert/:id", component: ConcertListComponent },
+  { path: 'subscription-form', component: SubscriptionFormComponent },
 
 ];

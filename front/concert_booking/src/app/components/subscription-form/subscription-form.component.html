@@ -1,0 +1,51 @@
+<div class="subscription-container">
+  <div class="subscription-form">
+    <h2>Create Your Account</h2>
+    <p class="email-display">Email: {{ email }}</p>
+
+    <div class="password-section">
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          [(ngModel)]="password"
+          (ngModelChange)="validatePassword()"
+          placeholder="Enter your password"
+        >
+        @if (passwordError) {
+          <p class="error-message">{{ passwordError }}</p>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          [(ngModel)]="confirmPassword"
+          (ngModelChange)="validatePassword()"
+          placeholder="Confirm your password"
+        >
+        @if (confirmPasswordError) {
+          <p class="error-message">{{ confirmPasswordError }}</p>
+        }
+      </div>
+    </div>
+
+    <div class="buttons">
+      <button
+        class="submit"
+        (click)="submitSubscription()"
+        [disabled]="isLoading || !isFormValid()"
+      >
+        {{ isLoading ? 'Processing...' : 'Create Account' }}
+      </button>
+      <button class="cancel" (click)="cancel()" [disabled]="isLoading">Cancel</button>
+    </div>
+
+    @if (error) {
+      <p class="error-message">{{ error }}</p>
+    }
+  </div>
+</div>
