@@ -38,7 +38,6 @@ class DashboardController extends AbstractDashboardController
     yield MenuItem::subMenu('Concerts management', 'fas fa-music')->setSubItems([
         MenuItem::linkToCrud('Events', 'fas fa-music', Event::class),
         MenuItem::linkToCrud('Artists', 'fas fa-user', Artist::class),
-        MenuItem::linkToCrud('Sessions', 'fas fa-calendar-alt', Session::class),
     ]);
 
     // Sub Menu Place
@@ -49,6 +48,7 @@ class DashboardController extends AbstractDashboardController
 
     // Sub Menu Configuration
     yield MenuItem::subMenu('Configuration', 'fas fa-cogs')->setSubItems([
+        MenuItem::linkToCrud('Sessions', 'fas fa-calendar-alt', Session::class),
         MenuItem::linkToCrud('Categories', 'fas fa-tags', Category::class),
         MenuItem::linkToCrud('Seat Types', 'fas fa-chair', SeatType::class),
         MenuItem::linkToCrud('Sessions/Seat Types', 'fas fa-chair', SessionSeatType::class),

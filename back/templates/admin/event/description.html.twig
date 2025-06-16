@@ -1,0 +1,12 @@
+{% if field.value %}
+    <div class="event-description">
+        {{ field.value|raw|nl2br }}
+    </div>
+{% endif %}
+
+<style>
+    .event-description {
+        white-space: pre-wrap;
+        line-height: 1.5;
+    }
+</style> 

@@ -1,0 +1,48 @@
+{% if field.value|length > 0 %}
+    <div class="sessions-list">
+        {% for session in field.value %}
+            <div class="session-item">
+                <h4>Session du {{ session.dateTime|date('d/m/Y H:i') }}</h4>
+                <div class="session-details">
+                    <p><strong>Salle:</strong> {{ session.hall.name }}</p>
+                    <p><strong>Adresse:</strong> {{ session.hall.address }}</p>
+                    
+                    <h5>Types de sièges disponibles:</h5>
+                    <ul>
+                        {% for seatType in session.sessionSeatTypes %}
+                            <li>
+                                {{ seatType.seatType.name }} - 
+                                {{ seatType.price }}€ - 
+                                {{ seatType.availableSeats }} places disponibles
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>Aucune session programmée</p>
+{% endif %}
+
+<style>
+    .sessions-list {
+        margin-top: 20px;
+    }
+    .session-item {
+        background: #f8f9fa;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 5px;
+    }
+    .session-details {
+        margin-left: 20px;
+    }
+    .session-details ul {
+        list-style: none;
+        padding-left: 0;
+    }
+    .session-details li {
+        margin: 5px 0;
+    }
+</style> 

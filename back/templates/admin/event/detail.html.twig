@@ -1,0 +1,195 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content %}
+    {% set event = entity.instance %}
+    <div class="event-container">
+        <div class="event-title">
+            <h2>{{ event.name }}</h2>
+        </div>
+
+        <div class="event-detail-container">
+            <div class="left-column">
+                <div class="event-artists-section">
+                    <h3>Artists</h3>
+                    {% if event.artist|length > 0 %}
+                        <div class="artists-list">
+                            {% for artist in event.artist %}
+                                <div class="artist-card">
+                                    {% if artist.imagePath %}
+                                        <img src="{{ asset('media/' ~ artist.imagePath) }}" alt="{{ artist.nickname }}" class="artist-image">
+                                    {% endif %}
+                                    <p class="artist-name">{{ artist.nickname }}</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p>No artists associated</p>
+                    {% endif %}
+                </div>
+
+                <div class="event-description-section">
+                    <h3>Description</h3>
+                    <div class="description-content">
+                        {{ event.description|raw|nl2br }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-column">
+                <div class="event-sessions-section">
+                    <h3>Sessions</h3>
+                    {% if event.sessions|length > 0 %}
+                        {% for session in event.sessions %}
+                            <div class="session-item">
+                                <div class="session-header">
+                                    <h4>Session on {{ session.dateTime|date('d/m/Y H:i') }}</h4>
+                                </div>
+                                <div class="session-details">
+                                    <p><strong>Venue:</strong> {{ session.hall.name }}</p>
+                                    <p><strong>Address:</strong> {{ session.hall.address }}</p>
+                                    
+                                    <h5>Available seat types:</h5>
+                                    <ul>
+                                        {% for seatType in session.sessionSeatTypes %}
+                                            <li>
+                                                {{ seatType.seatType.name }} - 
+                                                {{ seatType.price }}€ - 
+                                                {{ seatType.availableSeats }} seats available
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No sessions scheduled</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .event-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .event-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .event-title h2 {
+            text-transform: uppercase;
+            font-weight: bold;
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin: 0;
+        }
+
+        .event-detail-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .left-column, .right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        h3 {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        .artists-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .artist-card {
+            text-align: center;
+        }
+
+        .artist-image {
+            width: 100%;
+            max-width: 250px;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .artist-name {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin: 0;
+            color: #2c3e50;
+        }
+
+        .description-content {
+            white-space: pre-wrap;
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+
+        .session-item {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .session-header h4 {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin: 0 0 1rem 0;
+        }
+
+        .session-details {
+            margin-left: 1rem;
+        }
+
+        .session-details p {
+            margin: 0.5rem 0;
+            font-size: 1.1rem;
+        }
+
+        .session-details h5 {
+            margin: 1rem 0;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .session-details ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .session-details li {
+            margin: 0.5rem 0;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 1024px) {
+            .event-detail-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .artist-image {
+                max-width: 200px;
+                height: 200px;
+            }
+        }
+    </style>
+{% endblock %} 

@@ -36,11 +36,11 @@ class Event
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["event_read", "session_read", "category_read"])]
+    #[Groups(["event_read", "session_read", "category_read", "hall_read"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["event_read", "session_read", "artist_read", "category_read"])]
+    #[Groups(["event_read", "session_read", "artist_read", "category_read", "hall_read"])]
     private ?string $name = null;
 
     #[ORM\Column(length: 355)]
@@ -51,18 +51,18 @@ class Event
      * @var Collection<int, Artist>
      */
     #[ORM\ManyToMany(targetEntity: Artist::class, inversedBy: 'events')]
-    #[Groups(["event_read", "session_read"])]
+    #[Groups(["event_read", "session_read", "hall_read"])]
     private Collection $artist;
 
     /**
      * @var Collection<int, Session>
      */
-    #[ORM\OneToMany(targetEntity: Session::class, mappedBy: 'event')]
+    #[ORM\OneToMany(targetEntity: Session::class, mappedBy: 'event', cascade: ['persist', 'remove'])]
     #[Groups(["event_read"])]
     private Collection $sessions;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["event_read", "session_read", "artist_read", "category_read"])]
+    #[Groups(["event_read", "session_read", "artist_read", "category_read", "hall_read"])]
     private ?string $picture_path = null;
 
     public function __construct()

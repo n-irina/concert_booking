@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from "../header/header.component";
 import { FooterComponent } from "../footer/footer.component";
 import { ReservationFormComponent } from '../reservation-form/reservation-form.component';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-session-detail',
@@ -45,12 +46,14 @@ export class SessionDetailComponent implements OnInit{
   showInfo: boolean = false;
   showResa: boolean = false;
   selectedSession: Session | null = null;
+  safeDescription: SafeHtml | null = null;
 
   constructor(
     private session_service: GetSessionsService,
     private shared_service: EventSharedService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
+    private sanitizer: DomSanitizer
   ){ }
 
   ngOnInit(): void {
@@ -59,8 +62,11 @@ export class SessionDetailComponent implements OnInit{
     if (sessionId) {
       this.session_service.getSessionById(sessionId).subscribe(
         (res: Session) => {
-          this.session = [res]; // Wrap in array since component expects array
+          this.session = [res];
           this.event = res.event;
+          if (this.event) {
+            this.safeDescription = this.sanitizer.bypassSecurityTrustHtml(this.event.description);
+          }
           this.categories = this.shared_service.getCategories();
           this.minimum_price = this.getMinimumPrice(this.session);
           this.hall = res.hall;
@@ -107,7 +113,5 @@ export class SessionDetailComponent implements OnInit{
 
   handleReservation(reservation: { sessionId: number, seatTypeId: number, quantity: number }) {
     console.log('Reservation done:', reservation);
-    // Tu peux ensuite envoyer la réservation à ton API ou autre
   }
-
 }

@@ -17,6 +17,7 @@ export const routes: Routes = [
   { path: "", component: HomeComponent },
   { path: "concert", component: ConcertListComponent },
   { path: "concert/:id", component: ConcertDetailComponent },
+  { path: "concert/:id/reserve/:hall", component: ConcertDetailComponent },
   { path: "session", component: SessionDetailComponent },
   { path: "session/:sessionId", component: SessionDetailComponent },
   { path: "artist", component: ArtistListComponent },

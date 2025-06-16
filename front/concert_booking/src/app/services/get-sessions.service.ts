@@ -16,7 +16,7 @@ export class GetSessionsService {
   constructor(private http: HttpClient) { }
 
   getHallEventSessions(hallId: string, eventId: string): Observable<Api<Session>> {
-    const url = `${this.API_URL}/sessions?event=${eventId}`;
+    const url = `${this.API_URL}/sessions?hall=${hallId}&eventId=${eventId}`;
     console.log("Requesting sessions from:", url);
     return this.http.get<Api<Session>>(url);
   }

@@ -1,0 +1,20 @@
+{% if field.value|length > 0 %}
+    <div class="artists-list">
+        {% for artist in field.value %}
+            <div class="artist-item">
+                <p>{{ artist.nickname }}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>Aucun artiste associé</p>
+{% endif %}
+
+<style>
+    .artists-list {
+        margin-top: 10px;
+    }
+    .artist-item {
+        margin: 5px 0;
+    }
+</style> 

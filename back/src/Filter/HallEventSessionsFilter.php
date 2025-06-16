@@ -28,8 +28,8 @@ final class HallEventSessionsFilter extends AbstractFilter
         if ($property === 'hall') {
             $queryBuilder
                 ->innerJoin(sprintf('%s.hall', $alias), 'hall')
-                ->andWhere('hall.name = :hallName')
-                ->setParameter('hallName', $value);
+                ->andWhere('hall.id = :hallId')
+                ->setParameter('hallId', $value);
             return;
         }
     
@@ -48,9 +48,9 @@ final class HallEventSessionsFilter extends AbstractFilter
         return [
             'hall' => [
                 'property' => null,
-                'type' => 'string',
+                'type' => 'integer',
                 'required' => false,
-                'swagger' => ['description' => 'Filter sessions by hall name'],
+                'swagger' => ['description' => 'Filter sessions by hall Id'],
             ],
             'event' => [
                 'property' => null,

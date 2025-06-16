@@ -44,33 +44,20 @@ export class ConcertDetailComponent implements OnInit{
   ){ }
 
   ngOnInit(): void {
-
-    // const eventId = this.route.snapshot.paramMap.get('id');
-    // const artistId = this.route.snapshot.queryParamMap.get('artistId');
-
-    // const artistIdParam = this.route.snapshot.queryParamMap.get('artistId');
-
-    // if (artistIdParam) {
-    //   const artistId = parseInt(artistIdParam, 10);
-    //   this.event_service.getArtistEvents(artistId).subscribe(
-    //     (res: Api<Event_api>) =>  {
-    //       this.event = res["member"];
-    //       console.log("deatil event", this.event)
-    //     },
-    //     (error) => {
-    //       console.error("Error fetching singer", error);
-    //     },
-    //   );
-    // } else {
-    //   console.warn('Aucun artistId trouvé dans l’URL');
-    // }
-
     const id: number = +this.activatedRoute.snapshot.params["id"];
+    const selectedHall = this.activatedRoute.snapshot.params["hall"];
 
     this.event_service.getEventById(id).subscribe(
       (res: Event_api) => {
         this.event = res;
         this.grouped_sessions = this.groupSessionsByHall(this.event?.sessions);
+
+        // Si un hall est spécifié dans l'URL, ne garder que les sessions de ce hall
+        if (selectedHall && this.grouped_sessions[selectedHall]) {
+          const filteredSessions = { [selectedHall]: this.grouped_sessions[selectedHall] };
+          this.grouped_sessions = filteredSessions;
+        }
+
         this.minimum_price = this.calculateMinPricesByHall(this.grouped_sessions);
         this.event_category = this.getAllCategories(this.event);
         this.shared_service.setCategories(this.event_category);
@@ -79,9 +66,6 @@ export class ConcertDetailComponent implements OnInit{
         console.error("Error fetching future events", error);
       }
     );
-
-
-
   }
 
   groupSessionsByHall(sessions: Session[]) {
@@ -123,8 +107,16 @@ export class ConcertDetailComponent implements OnInit{
     return event.artist.flatMap(a => a.category);
   }
 
-  goToDetails(hall: string, eventId: string): void{
-    this.router.navigate(["/session/"], {queryParams: { hall: hall, eventId: eventId}});
+  goToDetails(hall: string, eventId: string): void {
+    // Trouver les sessions pour ce hall et cet événement
+    const sessions = this.grouped_sessions[hall];
+    if (sessions && sessions.length > 0) {
+      // On redirige toujours vers la première session, qui affichera toutes les dates disponibles
+      this.router.navigate(['/session', sessions[0].id]);
+    } else {
+      console.error('No session found for this hall and event');
+      this.router.navigate(['/']);
+    }
   }
 
 }

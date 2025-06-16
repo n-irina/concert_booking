@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Event;
+use App\Entity\Session;
 use Doctrine\Migrations\Configuration\EntityManager\ManagerRegistryEntityManager;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -14,6 +15,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
+use App\Form\SessionType;
 
 class EventCrudController extends AbstractCrudController
 {
@@ -34,20 +37,38 @@ class EventCrudController extends AbstractCrudController
         return [
             IdField::new('id')->hideOnForm(),
             TextField::new('name'),
-            TextEditorField::new('description'),
+            TextEditorField::new('description')
+                ->onlyOnForms(),
+            TextField::new('description')
+                ->setTemplatePath('admin/event/description.html.twig'),
             ImageField::new('picture_path')
-            ->setBasePath('/media')
-            ->setUploadDir('public/media')               
-            ->setUploadedFileNamePattern('[randomhash].[extension]') 
-            ->setRequired(false),
+                ->setBasePath('/media')
+                ->setUploadDir('public/media')               
+                ->setUploadedFileNamePattern('[randomhash].[extension]') 
+                ->setRequired(false),
             AssociationField::new('artist')
-              ->setFormTypeOptions([
-                  'by_reference' => false, 
-              ])
-              ->setLabel('Artists')
-              ->onlyOnForms(), 
+                ->setFormTypeOptions([
+                    'by_reference' => false, 
+                ])
+                ->setLabel('Artists')
+                ->onlyOnForms(), 
             TextField::new('artistsString', 'Artists')
-              ->onlyOnIndex()
+                ->onlyOnIndex(),
+            CollectionField::new('sessions')
+                ->setEntryType(SessionType::class)
+                ->allowAdd()
+                ->allowDelete()
+                ->setFormTypeOptions([
+                    'by_reference' => false,
+                ])
+                ->onlyOnForms(),
+            // Champs pour la vue détaillée
+            AssociationField::new('artist', 'Artists')
+                ->onlyOnDetail()
+                ->setTemplatePath('admin/event/artists.html.twig'),
+            CollectionField::new('sessions', 'Sessions')
+                ->onlyOnDetail()
+                ->setTemplatePath('admin/event/sessions.html.twig'),
         ];
     }
 
@@ -70,7 +91,17 @@ class EventCrudController extends AbstractCrudController
 
     }   
 
-
-
-
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->setEntityLabelInSingular('Event')
+            ->setEntityLabelInPlural('Events')
+            ->setPageTitle('detail', fn (Event $event) => (string) $event)
+            ->setPageTitle('index', 'Event list')
+            ->setPageTitle('new', 'Create an event')
+            ->setPageTitle('edit', fn (Event $event) => sprintf('Modify <b>%s</b>', $event->getName()))
+            ->setDefaultSort(['id' => 'DESC'])
+            ->showEntityActionsInlined()
+            ->overrideTemplate('crud/detail', 'admin/event/detail.html.twig');
+    }
 }

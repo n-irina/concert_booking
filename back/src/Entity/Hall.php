@@ -49,6 +49,7 @@ class Hall
      * @var Collection<int, Session>
      */
     #[ORM\OneToMany(targetEntity: Session::class, mappedBy: 'hall')]
+    #[Groups(["hall_read"])]
     private Collection $sessions;
 
     /**

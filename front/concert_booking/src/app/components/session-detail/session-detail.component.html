@@ -15,7 +15,12 @@
             <h3>Only on {{ session[0].date_time | date: 'fullDate' }}</h3>
           </div>
           <div class="sessions" *ngIf="session.length >= 2">
-            <h3>From {{ session[0].date_time | date: 'fullDate' }}</h3>
+            <h3>Available dates:</h3>
+            <div class="session-dates">
+              <div *ngFor="let s of session" class="session-date">
+                {{ s.date_time | date: 'fullDate' }} at {{ s.date_time | date: 'shortTime' }}
+              </div>
+            </div>
           </div>
           <h4 class="concert-type">CONCERT - {{ categories | formatCategories | uppercase }}</h4>
           <h4 class="event-artists">Artist: {{ event.artist | formatArtists }}</h4>
@@ -44,8 +49,6 @@
         [sessions]="session"
         (reservationConfirmed)="handleReservation($event)">
       </app-reservation-form>
-
-
     </div>
     <!-- Overlay -->
     <div class="overlay" *ngIf="showInfo" (click)="closeInformation()"></div>
@@ -63,9 +66,9 @@
         <div class="event-presentation">
           <h3>The event:</h3>
           <div class="event">
-            {{ event.description }} <br />
-            Book your concert's ticket for: {{ event.name | uppercase }} - {{ hallName | uppercase }} <br />
-            Price is from: {{ minimum_price }}$
+            <div [innerHTML]="safeDescription"></div>
+            <p>Book your concert's ticket for: {{ event.name | uppercase }} - {{ hallName | uppercase }}</p>
+            <p>Price is from: {{ minimum_price }}$</p>
             <p *ngIf="session.length === 1">
               Date: {{ session[0].date_time | date: 'fullDate' }}
             </p>

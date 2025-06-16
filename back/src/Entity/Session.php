@@ -32,16 +32,16 @@ class Session
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["event_read", "session_read"])]
+    #[Groups(["event_read", "session_read", "hall_read"])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(["event_read", "session_read"])]
+    #[Groups(["event_read", "session_read", "hall_read"])]
     private ?\DateTimeInterface $date_time = null;
 
     #[ORM\ManyToOne(inversedBy: 'sessions')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(["session_read"])]
+    #[Groups(["session_read", "hall_read"])]
     private ?Event $event = null;
 
     #[ORM\ManyToOne(inversedBy: 'sessions')]
@@ -58,7 +58,7 @@ class Session
     /**
      * @var Collection<int, SessionSeatType>
      */
-    #[ORM\OneToMany(targetEntity: SessionSeatType::class, mappedBy: 'session')]
+    #[ORM\OneToMany(mappedBy: 'session', targetEntity: SessionSeatType::class, cascade: ['persist'], orphanRemoval: true)]
     #[Groups(["event_read", "session_read"])]
     private Collection $sessionSeatTypes;
 
