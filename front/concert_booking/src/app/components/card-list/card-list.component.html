@@ -28,6 +28,16 @@
           <h4 class="event-category" *ngIf="type === 'event'">
             Artist(s): {{ item.artist | formatArtists }}
           </h4>
+
+          <div *ngIf="type === 'event'">
+            <span>eventId: {{ item.id }}</span>
+            <a *ngIf="hallId" [routerLink]="['/hall', hallId, 'event', item.id, 'sessions']" class="btn btn-primary">
+              Voir les sessions
+            </a>
+            <a *ngIf="!hallId" [routerLink]="['/events', item.id, 'sessions']" class="btn btn-primary">
+              Voir les sessions
+            </a>
+          </div>
         </div>
       </div>
     </div>

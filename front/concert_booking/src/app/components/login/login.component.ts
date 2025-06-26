@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService, LoginCredentials } from '../../services/auth.service';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -19,11 +20,18 @@ export class LoginComponent {
 
   isLoading = false;
   error = '';
+  redirectUrl: string = '/';
 
   constructor(
     private authService: AuthService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
+    // Récupérer l'URL de redirection depuis les paramètres de requête
+    this.route.queryParams.subscribe(params => {
+      this.redirectUrl = params['redirect'] || '/';
+    });
+  }
 
   onSubmit(): void {
     if (!this.credentials.email || !this.credentials.password) {
@@ -37,13 +45,13 @@ export class LoginComponent {
     console.log('Submitting login form:', this.credentials);
 
     this.authService.login(this.credentials).subscribe({
-      next: (response) => {
+      next: (response: any) => {
         console.log('Login successful:', response);
         this.isLoading = false;
-        // Rediriger vers la page d'accueil après connexion
-        this.router.navigate(['/']);
+        // Rediriger vers la page d'origine ou la page d'accueil
+        this.router.navigate([this.redirectUrl]);
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Login error:', err);
         this.isLoading = false;
         this.error = err.error?.message || 'Login failed. Please check your credentials.';

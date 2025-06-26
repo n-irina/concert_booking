@@ -26,7 +26,7 @@ class Hall
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["hall_read"])]
+    #[Groups(["event_read", "session_read", "hall_read"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]

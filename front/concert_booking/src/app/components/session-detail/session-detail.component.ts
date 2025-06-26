@@ -47,6 +47,9 @@ export class SessionDetailComponent implements OnInit{
   showResa: boolean = false;
   selectedSession: Session | null = null;
   safeDescription: SafeHtml | null = null;
+  minDate: Date | null = null;
+  maxDate: Date | null = null;
+  selectedSessionId: number | null = null;
 
   constructor(
     private session_service: GetSessionsService,
@@ -57,30 +60,42 @@ export class SessionDetailComponent implements OnInit{
   ){ }
 
   ngOnInit(): void {
-    const sessionId = this.activatedRoute.snapshot.params['sessionId'];
-
-    if (sessionId) {
-      this.session_service.getSessionById(sessionId).subscribe(
-        (res: Session) => {
-          this.session = [res];
-          console.log(this.session);
-          this.event = res.event;
-          if (this.event) {
-            this.safeDescription = this.sanitizer.bypassSecurityTrustHtml(this.event.description);
+    this.activatedRoute.params.subscribe(params => {
+      const eventId = params['eventId'];
+      const hallId = params['hallId'];
+      if (eventId) {
+        this.session_service.getSessionsByEventId(eventId).subscribe(
+          (sessions: Session[]) => {
+            if (hallId) {
+              this.session = sessions.filter(s => String(s.hall.id) === String(hallId));
+            } else {
+              this.session = sessions;
+            }
+            this.event = this.session[0]?.event;
+            this.hall = this.session[0]?.hall;
+            this.hallName = this.hall?.name || null;
+            this.categories = this.shared_service.getCategories();
+            this.minimum_price = this.getMinimumPrice(this.session);
+            if (this.event) {
+              this.safeDescription = this.sanitizer.bypassSecurityTrustHtml(this.event.description);
+            }
+            this.computeDateRange();
+          },
+          (error) => {
+            this.router.navigate(['/']);
           }
-          this.categories = this.shared_service.getCategories();
-          this.minimum_price = this.getMinimumPrice(this.session);
-          this.hall = res.hall;
-          this.hallName = this.hall?.name || null;
-        },
-        (error) => {
-          console.error("Error fetching session", error);
-          this.router.navigate(['/']);
-        }
-      );
-    } else {
-      console.error("Missing session ID");
-      this.router.navigate(['/']);
+        );
+      } else {
+        this.router.navigate(['/']);
+      }
+    });
+  }
+
+  computeDateRange() {
+    if (this.session && this.session.length > 0) {
+      const dates = this.session.map(s => new Date(s.date_time));
+      this.minDate = new Date(Math.min(...dates.map(d => d.getTime())));
+      this.maxDate = new Date(Math.max(...dates.map(d => d.getTime())));
     }
   }
 

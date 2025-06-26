@@ -11,6 +11,7 @@ import { EventSharedService } from '../../services/event-shared.service';
 import { Hall } from '../../models/hall.model';
 import { HeaderComponent } from "../header/header.component";
 import { FooterComponent } from "../footer/footer.component";
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-concert-detail',
@@ -24,7 +25,8 @@ import { FooterComponent } from "../footer/footer.component";
     UpperCasePipe,
     FormatCategoriesPipe,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    RouterLink
 ],
   templateUrl: './concert-detail.component.html',
   styleUrl: './concert-detail.component.scss'
@@ -112,7 +114,7 @@ export class ConcertDetailComponent implements OnInit{
     const sessions = this.grouped_sessions[hall];
     if (sessions && sessions.length > 0) {
       // On redirige toujours vers la première session, qui affichera toutes les dates disponibles
-      this.router.navigate(['/session', sessions[0].id]);
+      this.router.navigate(['/events', eventId, '/sessions']);
     } else {
       console.error('No session found for this hall and event');
       this.router.navigate(['/']);

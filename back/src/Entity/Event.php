@@ -56,6 +56,7 @@ class Event
 
     /**
      * @var Collection<int, Session>
+     * 
      */
     #[ORM\OneToMany(targetEntity: Session::class, mappedBy: 'event', cascade: ['persist', 'remove'])]
     #[Groups(["event_read"])]

@@ -1,6 +1,6 @@
 import { NgFor, NgIf, UpperCasePipe } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FormatArtistsPipe } from '../../pipes/format-artists.pipe';
 import { FormatCategoriesPipe } from '../../pipes/format-categories.pipe';
 import { Event_api } from '../../models/event_api.model';
@@ -16,6 +16,7 @@ import { Session } from '../../models/session.model';
     FormatArtistsPipe,
     FormatCategoriesPipe,
     UpperCasePipe,
+    RouterModule,
   ],
   templateUrl: './card-list.component.html',
   styleUrl: './card-list.component.scss'
@@ -25,6 +26,7 @@ export class CardListComponent {
   @Input() items: any[] = [];
   @Input() type: 'artist' | 'event' | 'hall'= 'artist';
   @Input() sessions?: Session[];
+  @Input() hallId?: number;
 
   constructor(private router: Router) {}
 
@@ -32,16 +34,7 @@ export class CardListComponent {
     if (this.type === 'artist') {
       this.router.navigate(['/artist', id]);
     } else if (this.type === 'event') {
-      if (this.sessions) {
-        const session = this.sessions.find(s => s.event.id === id);
-        if (session) {
-          this.router.navigate(['/session', session.id]);
-        } else {
-          this.router.navigate(['/concert', id]);
-        }
-      } else {
-        this.router.navigate(['/concert', id]);
-      }
+      this.router.navigate(['/events', id, 'sessions']);
     }
     else {
       this.router.navigate(['/hall', id]);

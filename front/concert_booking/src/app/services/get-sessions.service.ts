@@ -26,4 +26,8 @@ export class GetSessionsService {
     console.log("Requesting session by ID from:", url);
     return this.http.get<Session>(url);
   }
+
+  getSessionsByEventId(eventId: number) {
+    return this.http.get<Session[]>(`${this.API_URL}/events/${eventId}/sessions`);
+  }
 }

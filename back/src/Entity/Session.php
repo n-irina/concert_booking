@@ -46,7 +46,7 @@ class Session
 
     #[ORM\ManyToOne(inversedBy: 'sessions')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(["event_read", "session_read"])]
+    #[Groups(["event_read", "session_read",])]
     private ?Hall $hall = null;
 
     /**
@@ -182,5 +182,13 @@ class Session
     public function getHallString(): string
     {
         return $this->getHall()->getName();
+    }
+
+    /**
+     * @Groups({"session_read"})
+     */
+    public function getHallId(): ?int
+    {
+        return $this->getHall()?->getId();
     }
 }

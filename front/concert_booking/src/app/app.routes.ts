@@ -12,13 +12,14 @@ import { CategoryDetailComponent } from './components/category-detail/category-d
 import { LandingPageComponent } from './components/landing-page/landing-page.component';
 import { SubscriptionFormComponent } from './components/subscription-form/subscription-form.component';
 import { LoginComponent } from './components/login/login.component';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
 
   { path: "", component: HomeComponent },
   { path: "concert", component: ConcertListComponent },
   { path: "concert/:id", component: ConcertDetailComponent },
-  { path: "concert/:id/reserve/:hall", component: ConcertDetailComponent },
+  { path: "concert/:id/reserve/:hall", component: ConcertDetailComponent, canActivate: [authGuard] },
   { path: "session", component: SessionDetailComponent },
   { path: "session/:sessionId", component: SessionDetailComponent },
   { path: "artist", component: ArtistListComponent },
@@ -31,6 +32,9 @@ export const routes: Routes = [
   { path: "category/hall/:id", component: HallListComponent },
   { path: "category/concert/:id", component: ConcertListComponent },
   { path: "subscription-form", component: SubscriptionFormComponent },
+  { path: "login", component: LoginComponent },
   { path: "connexion", component: LoginComponent },
+  { path: "events/:eventId/sessions", component: SessionDetailComponent, canActivate: [authGuard] },
+  { path: "hall/:hallId/event/:eventId/sessions", component: SessionDetailComponent, canActivate: [authGuard] },
 
 ];

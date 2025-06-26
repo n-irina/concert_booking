@@ -11,6 +11,7 @@ export interface Session {
   "date_time": string,
   "event": Event_api,
   "hall": Hall,
+  "hall_id"?: number,
   "bookings": Booking[],
   "sessionSeatTypes": SessionSeatType[],
 

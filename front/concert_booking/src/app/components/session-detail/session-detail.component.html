@@ -11,16 +11,13 @@
       <div class="card-text">
         <img [src]="'https://localhost:8000/media/' + event.picture_path" alt="event image" />
         <div class="info-content">
-          <div class="sessions" *ngIf="session.length === 1">
-            <h3>Only on {{ session[0].date_time | date: 'fullDate' }}</h3>
-          </div>
-          <div class="sessions" *ngIf="session.length >= 2">
-            <h3>Available dates:</h3>
-            <div class="session-dates">
-              <div *ngFor="let s of session" class="session-date">
-                {{ s.date_time | date: 'fullDate' }} at {{ s.date_time | date: 'shortTime' }}
-              </div>
-            </div>
+          <div class="sessions" *ngIf="minDate && maxDate">
+            <ng-container *ngIf="minDate.getTime() !== maxDate.getTime(); else oneDate">
+              <h3>From {{ minDate | date: 'fullDate' }} to {{ maxDate | date: 'fullDate' }}</h3>
+            </ng-container>
+            <ng-template #oneDate>
+              <h3>Only on {{ minDate | date: 'fullDate' }}</h3>
+            </ng-template>
           </div>
           <h4 class="concert-type">CONCERT - {{ categories | formatCategories | uppercase }}</h4>
           <h4 class="event-artists">Artist: {{ event.artist | formatArtists }}</h4>
@@ -42,11 +39,46 @@
     </div>
     <div class="session-venue-img">
       <img [src]="'https://localhost:8000/media/' + hall.picture_path" alt="hall image">
-      <button class="btn-info" (click)="showReservation()">Reserve</button>
+
+      <!-- Section de sélection de session améliorée -->
+      <div class="session-selection-container" *ngIf="session.length > 1">
+        <div class="session-selection-card">
+          <h5 class="session-selection-title">
+            <i class="bi bi-calendar-event me-2"></i>
+            Choose your session:
+          </h5>
+
+          <div class="session-options">
+            <div class="form-check session-option" *ngFor="let s of session">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="selectedSession"
+                [id]="'session-' + s.id"
+                [value]="s.id"
+                [(ngModel)]="selectedSessionId"
+                (change)="onSelectSession(s.id)">
+              <label class="form-check-label" [for]="'session-' + s.id">
+                <div class="session-date-info">
+                  <span class="session-date">{{ s.date_time | date: 'fullDate' }}</span>
+                  <span class="session-time">{{ s.date_time | date: 'shortTime' }}</span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-lg reserve-btn"
+              (click)="showReservation()"
+              [disabled]="!selectedSessionId">
+        <i class="bi bi-ticket-perforated me-2"></i>
+        Réserver
+      </button>
     </div>
     <div class="reservation-info" *ngIf="showResa">
       <app-reservation-form
-        [sessions]="session"
+        [sessions]="selectedSession ? [selectedSession] : []"
         (reservationConfirmed)="handleReservation($event)">
       </app-reservation-form>
     </div>
@@ -69,11 +101,11 @@
             <div [innerHTML]="safeDescription"></div>
             <p>Book your concert's ticket for: {{ event.name | uppercase }} - {{ hallName | uppercase }}</p>
             <p>Price is from: {{ minimum_price }}$</p>
-            <p *ngIf="session.length === 1">
-              Date: {{ session[0].date_time | date: 'fullDate' }}
+            <p *ngIf="minDate && maxDate && minDate.getTime() !== maxDate.getTime()">
+              Date: {{ minDate | date: 'fullDate' }} to {{ maxDate | date: 'fullDate' }}
             </p>
-            <p *ngIf="session.length >= 2">
-              Date: {{ session[0].date_time | date: 'fullDate' }} to {{ session[session.length - 1].date_time | date: 'fullDate' }}
+            <p *ngIf="minDate && maxDate && minDate.getTime() === maxDate.getTime()">
+              Date: {{ minDate | date: 'fullDate' }}
             </p>
             <p>
               Venue: {{ hallName | uppercase }}.
@@ -83,8 +115,8 @@
 
         <strong>Placement and price</strong>
         <div class="placement-price">
-          <div class="placement" *ngFor="let seatType of session[0].sessionSeatTypes">
-          {{ seatType.seat_type.name }}: {{ seatType.seat_type.description }}
+          <div class="placement" *ngFor="let seatType of selectedSession?.sessionSeatTypes">
+            {{ seatType.seat_type.name }}: {{ seatType.seat_type.description }}
           </div>
         </div>
       </div>

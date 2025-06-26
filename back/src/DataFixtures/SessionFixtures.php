@@ -13,63 +13,59 @@ class SessionFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
-
         $data = [
-            
-            ["event" => "Renaissance Tour", "hall" => "Accor Arena Bercy", "date_time" => "2026-12-01 20:00:00"],
-            ["event" => "Renaissance Tour", "hall" => "Accor Arena Bercy", "date_time" => "2026-12-02 20:00:00"],
-            ["event" => "Renaissance Tour", "hall" => "Accor Arena Bercy", "date_time" => "2026-12-03 20:00:00"],
+            ["event" => "Renaissance Tour", "hall" => "Accor Arena Bercy"],
+            ["event" => "Renaissance Tour", "hall" => "Accor Arena Bercy"],
+            ["event" => "Renaissance Tour", "hall" => "Accor Arena Bercy"],
 
-            ["event" => "Champagne & Roses Tour", "hall" => "Accor Arena Bercy", "date_time" => "2026-01-01 20:30:00"],
-            ["event" => "Champagne & Roses Tour", "hall" => "Le Zénith de Paris", "date_time" => "2026-01-02 20:00:00"],
-            ["event" => "Champagne & Roses Tour", "hall" => "Le Zénith de Paris", "date_time" => "2026-01-03 19:30:00"],
+            ["event" => "Champagne & Roses Tour", "hall" => "Accor Arena Bercy"],
+            ["event" => "Champagne & Roses Tour", "hall" => "Le Zénith de Paris"],
+            ["event" => "Champagne & Roses Tour", "hall" => "Le Zénith de Paris"],
 
-            ["event" => "Past, Present, Future Tour", "hall" => "Olympia", "date_time" => "2025-09-10 19:30:00"],
-            ["event" => "Past, Present, Future Tour", "hall" => "Olympia", "date_time" => "2025-09-11 20:30:00"],
-            
-            ["event" => "Exclusive Tour", "hall" => "Le Zénith de Paris", "date_time" => "2025-08-20 20:00:00"],
-            ["event" => "Exclusive Tour", "hall" => "Le Zénith de Paris", "date_time" => "2025-08-21 20:00:00"],
+            ["event" => "Past, Present, Future Tour", "hall" => "Olympia"],
+            ["event" => "Past, Present, Future Tour", "hall" => "Olympia"],
 
-            ["event" => "Ronisia", "hall" => "Le Zénith de Paris", "date_time" => "2024-05-12 20:00:00"],
+            ["event" => "Exclusive Tour", "hall" => "Le Zénith de Paris"],
+            ["event" => "Exclusive Tour", "hall" => "Le Zénith de Paris"],
 
-            ["event" => "Divinely Uninspired to a Hellish Extent Tour", "hall" => "Accor Arena Bercy", "date_time" => "2025-02-26 20:00:00"],
+            ["event" => "Ronisia", "hall" => "Le Zénith de Paris"],
 
-            ["event" => "The Mathematics Tour", "hall" => "Accor Arena Bercy", "date_time" => "2025-07-13 20:00:00"],
-            ["event" => "The Mathematics Tour", "hall" => "Le Zénith de Paris", "date_time" => "2025-07-14 20:00:00"],
-            ["event" => "The Mathematics Tour", "hall" => "Olympia", "date_time" => "2025-07-15 20:00:00"],
+            ["event" => "Divinely Uninspired to a Hellish Extent Tour", "hall" => "Accor Arena Bercy"],
 
-            ["event" => "Anti World Tour", "hall" => "Accor Arena Bercy", "date_time" => "2024-06-28 20:30:00"],
-            ["event" => "Anti World Tour", "hall" => "Le Zénith de Paris", "date_time" => "2024-06-29 20:00:00"],
+            ["event" => "The Mathematics Tour", "hall" => "Accor Arena Bercy"],
+            ["event" => "The Mathematics Tour", "hall" => "Le Zénith de Paris"],
+            ["event" => "The Mathematics Tour", "hall" => "Olympia"],
 
-            ["event" => "Sam Smith unique concert", "hall" => "La Maroquinerie", "date_time" => "2025-10-08 19:30:00"],
+            ["event" => "Anti World Tour", "hall" => "Accor Arena Bercy"],
+            ["event" => "Anti World Tour", "hall" => "Le Zénith de Paris"],
 
-            ["event" => "Jp Cooper concert", "hall" => "La Maroquinerie", "date_time" => "2025-11-19 19:30:00"],
+            ["event" => "Sam Smith unique concert", "hall" => "La Maroquinerie"],
+
+            ["event" => "Jp Cooper concert", "hall" => "La Maroquinerie"],
         ];
 
-        foreach ($data as $entry) {
-
+        foreach ($data as $i => $entry) {
             $event = $this->getReference($entry["event"], Event::class );
             $hall = $this->getReference($entry["hall"], Hall::class);
 
             $session = new Session();
             $session->setEvent($event);
             $session->setHall($hall);
-            $session->setDateTime(new \DateTime($entry["date_time"]));
+
+            // Date dynamique : aujourd'hui + $i jours à 20h
+            $date = (new \DateTime())->modify('+' . ($i + 1) . ' days')->setTime(20, 0, 0);
+            $session->setDateTime($date);
 
             $manager->persist($session);
 
             $key = $entry["event"] . " - " . $entry["hall"];
-
             if (!isset($session_counters[$key])) {
                 $session_counters[$key] = 1;
             } else {
                 $session_counters[$key]++;
             }
-
             $reference_key = $key . " " . $session_counters[$key];
-
             $this->addReference($reference_key, $session);
-
         }
 
         $manager->flush();

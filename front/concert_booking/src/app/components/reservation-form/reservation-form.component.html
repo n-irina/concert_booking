@@ -1,57 +1,112 @@
 <div class="reservation-form" *ngIf="sessions.length">
   <h4 class="reservation-title">Select a time on</h4>
 
-  <!-- Choix de la session -->
-  <select class="form-control" (change)="onSelectSession($any($event.target).value)">
-    <option *ngFor="let s of sessions" [value]="s.id" [selected]="s.id === selectedSession?.id">
-      {{ s.date_time | date: 'fullDate' }} at {{ s.date_time | date: 'shortTime' }}
-    </option>
-  </select>
+  <!-- Choix de la session avec menu déroulant stylisé Bootstrap -->
+  <div class="form-group">
+    <label for="sessionSelect" class="form-label">Choose your session:</label>
+    <select
+      id="sessionSelect"
+      class="form-select form-select-lg"
+      (change)="onSelectSession($any($event.target).value)"
+      [ngClass]="{'is-valid': selectedSession, 'is-invalid': !selectedSession}">
+      <option value="" disabled selected>Select a session...</option>
+      <option *ngFor="let s of sessions" [value]="s.id" [selected]="s.id === selectedSession?.id">
+        {{ s.date_time | date: 'fullDate' }} at {{ s.date_time | date: 'shortTime' }}
+      </option>
+    </select>
+    <div class="invalid-feedback" *ngIf="!selectedSession">
+      Please select a session to continue.
+    </div>
+  </div>
 
-  <!-- Choix du seat type -->
+  <!-- Choix du seat type avec checkbox stylisées -->
   <div class="seat-types" *ngIf="selectedSession?.sessionSeatTypes?.length && selectedSession">
-    <h5>Select your seats:</h5>
-    <div class="seat-option" *ngFor="let seat of selectedSession.sessionSeatTypes">
-      <div class="seat-selection">
-        <label class="seat-label" [class.selected]="selectedSeatTypeId === seat.seat_type.id">
-          <input
-            type="checkbox"
-            name="seat_type"
-            id="seat.seat_type.id + 'selected'"
-            value="seat.seat_type.id"
-            [checked]="selectedSeatTypeId === seat.seat_type.id"
-            (click)="onSeatTypeChange(seat.seat_type.id)"
-          />
-          {{ seat.seat_type.name }} - {{ seat.seat_type.description }} ({{ seat.price }}$)
-        </label>
-      </div>
+    <h5 class="seat-types-title">Select your seats:</h5>
 
-      <!-- Sélection du nombre de places -->
-      <select
-        class="quantity-select"
-        [disabled]="selectedSeatTypeId !== seat.seat_type.id"
-        [ngModel]="getQuantityForSeat(seat.seat_type.id)"
-        (ngModelChange)="updateQuantity(seat.seat_type.id, $event)">
-        <option *ngFor="let qty of quantities" [value]="qty">{{ qty }}</option>
-      </select>
+    <div class="row g-3">
+      <div class="col-12" *ngFor="let seat of selectedSession.sessionSeatTypes; let i = index">
+        <div class="card seat-option-card"
+             [ngClass]="{'border-primary': isSeatTypeSelected(i)}">
+          <div class="card-body">
+            <div class="row align-items-center">
+              <!-- Checkbox stylisée -->
+              <div class="col-auto">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    [id]="'seat-' + i"
+                    [name]="'seat-type-' + i"
+                    [(ngModel)]="seatTypeSelections[i]"
+                    (ngModelChange)="onSeatTypeChange(i)"
+                  />
+                  <label class="form-check-label" [for]="'seat-' + i">
+                    <span class="seat-type-name">{{ seat.seat_type.name }}</span>
+                  </label>
+                </div>
+              </div>
 
-      <!-- Résumé par type de siège -->
-      <div class="seat-summary" *ngIf="selectedSeatTypeId === seat.seat_type.id && seatQuantities[seat.seat_type.id] > 0">
-        <p>{{ seatQuantities[seat.seat_type.id] }} x {{ seat.seat_type.name }}: {{ seat.price * seatQuantities[seat.seat_type.id] }}$</p>
+              <!-- Description et prix -->
+              <div class="col">
+                <div class="seat-info">
+                  <p class="seat-description mb-1">{{ seat.seat_type.description }}</p>
+                  <span class="seat-price badge bg-success">{{ seat.price }}$</span>
+                </div>
+              </div>
+
+              <!-- Sélection du nombre de places -->
+              <div class="col-auto">
+                <select
+                  class="form-select quantity-select"
+                  [disabled]="!isSeatTypeSelected(i)"
+                  [(ngModel)]="seatQuantities[i]"
+                  (ngModelChange)="updateQuantity(i, +$event)">
+                  <option *ngFor="let qty of quantities" [value]="qty">{{ qty }}</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Résumé par type de siège -->
+            <div class="seat-summary mt-2"
+                 *ngIf="isSeatTypeSelected(i) && seatQuantities[i] > 0">
+              <div class="alert alert-info mb-0">
+                <i class="bi bi-info-circle me-2"></i>
+                {{ seatQuantities[i] }} x {{ seat.seat_type.name }}:
+                <strong>{{ seat.price * seatQuantities[i] }}$</strong>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- Résumé total -->
-    <div class="total-summary" *ngIf="totalAmount > 0">
-      <h5>Total reservation:</h5>
-      <p class="total-amount">Total: {{ totalAmount }}$</p>
+    <div class="total-summary mt-4" *ngIf="totalAmount > 0">
+      <div class="card border-success">
+        <div class="card-header bg-success text-white">
+          <h5 class="mb-0">
+            <i class="bi bi-cart-check me-2"></i>
+            Total reservation
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="fs-5">Total Amount:</span>
+            <span class="fs-4 fw-bold text-success">{{ totalAmount }}$</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <button
-    class="btn btn-primary"
-    [disabled]="totalAmount === 0"
-    (click)="confirmReservation()">
-    Confirm Reservation
-  </button>
+  <!-- Bouton de confirmation -->
+  <div class="d-grid gap-2 mt-4">
+    <button
+      class="btn btn-primary btn-lg"
+      [disabled]="totalAmount === 0"
+      (click)="confirmReservation()">
+      <i class="bi bi-check-circle me-2"></i>
+      Confirm Reservation
+    </button>
+  </div>
 </div>

@@ -6,5 +6,5 @@ controllers:
 
 # Route pour l'authentification JWT
 auth:
-    path: /api/auth
+    path: /api/login
     methods: [POST]
