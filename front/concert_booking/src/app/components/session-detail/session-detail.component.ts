@@ -63,6 +63,7 @@ export class SessionDetailComponent implements OnInit{
       this.session_service.getSessionById(sessionId).subscribe(
         (res: Session) => {
           this.session = [res];
+          console.log(this.session);
           this.event = res.event;
           if (this.event) {
             this.safeDescription = this.sanitizer.bypassSecurityTrustHtml(this.event.description);

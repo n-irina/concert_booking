@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { SearchBarComponent } from '../search-bar/search-bar.component';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -15,10 +15,17 @@ import { CommonModule } from '@angular/common';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
+
+  constructor(private router: Router){}
+
   isMenuOpen = false;
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  goToSubscriptionForm() {
+    this.router.navigate(['subscription-form']);
   }
 
   onSearch(query: string) {

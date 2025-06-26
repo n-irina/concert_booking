@@ -1,7 +1,25 @@
 <div class="subscription-container">
   <div class="subscription-form">
     <h2>Create Your Account</h2>
-    <p class="email-display">Email: {{ email }}</p>
+
+    <div class="email-section">
+      <div class="form-group">
+        <label for="email">Email</label>
+        @if (hasTempEmail()) {
+          <!-- Affichage en lecture seule si email pré-rempli -->
+          <p class="email-display">Email: {{ email }}</p>
+        } @else {
+          <!-- Champ de saisie si pas d'email pré-rempli -->
+          <input
+            type="email"
+            id="email"
+            [(ngModel)]="email"
+            placeholder="Enter your email"
+            required
+          >
+        }
+      </div>
+    </div>
 
     <div class="password-section">
       <div class="form-group">

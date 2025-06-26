@@ -11,6 +11,7 @@ import { CategoryListComponent } from './components/category-list/category-list.
 import { CategoryDetailComponent } from './components/category-detail/category-detail.component';
 import { LandingPageComponent } from './components/landing-page/landing-page.component';
 import { SubscriptionFormComponent } from './components/subscription-form/subscription-form.component';
+import { LoginComponent } from './components/login/login.component';
 
 export const routes: Routes = [
 
@@ -29,6 +30,7 @@ export const routes: Routes = [
   { path: "category/artist/:id", component: ArtistListComponent },
   { path: "category/hall/:id", component: HallListComponent },
   { path: "category/concert/:id", component: ConcertListComponent },
-  { path: 'subscription-form', component: SubscriptionFormComponent },
+  { path: "subscription-form", component: SubscriptionFormComponent },
+  { path: "connexion", component: LoginComponent },
 
 ];

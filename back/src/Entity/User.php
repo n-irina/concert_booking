@@ -22,17 +22,22 @@ use Symfony\Component\Validator\Constraints\PasswordStrength;
     read: false,
     controller: MeAction::class
 )]
-#[Post(denormalizationContext: ['groups' => ['post_user']], validationContext: ['groups' => ['Default', 'post_user']])]
+#[Post(
+    denormalizationContext: ['groups' => ['post_user']], 
+    validationContext: ['groups' => ['Default', 'post_user']],
+    normalizationContext: ['groups' => ['user_read']]
+)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['user_read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
-    #[Groups(['post_user'])]
+    #[Groups(['post_user', 'user_read'])]
     #[Assert\NotBlank(message: 'Email is required', groups: ['post_user'])]
     #[Assert\Email(message: 'Invalid email format', groups: ['post_user'])]
     private ?string $email = null;
@@ -41,6 +46,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var list<string> The user roles
      */
     #[ORM\Column]
+    #[Groups(['user_read'])]
     private array $roles = [];
 
     /**
@@ -55,7 +61,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Booking::class, mappedBy: 'user')]
     private Collection $booking;
 
-    #[ORM\Column(length: 255)]
+    /**
+     * @var string|null The plain password (not persisted)
+     */
     #[Groups(['post_user'])]    
     #[Assert\NotBlank(message: 'Password is required', groups: ['post_user'])]
     private ?string $plain_password = null;
@@ -63,6 +71,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->booking = new ArrayCollection();
+        $this->roles = ['ROLE_USER'];
     }
 
     public function getId(): ?int
@@ -100,9 +109,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
+        // Ajoute toujours ROLE_USER si absent
+        if (!in_array('ROLE_USER', $roles)) {
+            $roles[] = 'ROLE_USER';
+        }
         return array_unique($roles);
     }
 
@@ -111,8 +121,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function setRoles(array $roles): static
     {
+        // Ajoute toujours ROLE_USER si absent
+        if (!in_array('ROLE_USER', $roles)) {
+            $roles[] = 'ROLE_USER';
+        }
         $this->roles = $roles;
-
         return $this;
     }
 
@@ -137,7 +150,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        $this->plain_password = null;
     }
 
     /**

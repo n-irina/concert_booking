@@ -42,7 +42,10 @@ export class SubscriptionService {
       "plain_password": userData.plain_password
     };
 
+    console.log('API URL:', `${this.API_URL}/users`);
+    console.log('Headers:', headers);
     console.log('Creating user with data:', apiData);
+
     return this.http.post<User>(`${this.API_URL}/users`, apiData, { headers });
   }
 }

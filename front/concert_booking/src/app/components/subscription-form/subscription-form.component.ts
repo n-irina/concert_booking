@@ -27,12 +27,16 @@ export class SubscriptionFormComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const email = this.subscriptionService.getTempEmail();
-    if (!email) {
-      this.router.navigate(['/']);
-      return;
+    // Récupère l'email temporaire s'il existe (pour la landing page)
+    // Sinon, laisse le champ vide pour saisie manuelle (pour le header)
+    const tempEmail = this.subscriptionService.getTempEmail();
+    if (tempEmail) {
+      this.email = tempEmail;
     }
-    this.email = email;
+  }
+
+  hasTempEmail(): boolean {
+    return !!this.subscriptionService.getTempEmail();
   }
 
   validatePassword() {
@@ -67,8 +71,15 @@ export class SubscriptionFormComponent implements OnInit {
     return true;
   }
 
+  validateEmail(): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(this.email);
+  }
+
   isFormValid(): boolean {
-    return this.password.length > 0 &&
+    return this.email.length > 0 &&
+           this.validateEmail() &&
+           this.password.length > 0 &&
            this.confirmPassword.length > 0 &&
            !this.passwordError &&
            !this.confirmPasswordError;
@@ -92,7 +103,9 @@ export class SubscriptionFormComponent implements OnInit {
     this.subscriptionService.createUser(userData).subscribe({
       next: (response) => {
         console.log('User created successfully:', response);
-        this.subscriptionService.clearTempEmail();
+        if (this.hasTempEmail()) {
+          this.subscriptionService.clearTempEmail();
+        }
         this.router.navigate(['/'], {
           queryParams: {
             registered: 'true'
@@ -108,7 +121,9 @@ export class SubscriptionFormComponent implements OnInit {
   }
 
   cancel() {
-    this.subscriptionService.clearTempEmail();
+    if (this.hasTempEmail()) {
+      this.subscriptionService.clearTempEmail();
+    }
     this.router.navigate(['/']);
   }
 }
