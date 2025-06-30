@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+import { environment } from '../environment/environment';
 
 export interface LoginCredentials {
   email: string;
@@ -15,7 +16,7 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   private tokenKey = 'auth_token';
-  private apiUrl = 'https://localhost:8000'; // URL du backend Symfony
+  private apiUrl = environment.apiUrl; // URL du backend Symfony
 
   isLoggedIn(): boolean {
     return !!localStorage.getItem(this.tokenKey);
@@ -30,15 +31,16 @@ export class AuthService {
       'Content-Type': 'application/json'
     });
 
-    console.log('Sending login request to:', `${this.apiUrl}/api/login`);
+    console.log('Sending login request to:', `${this.apiUrl}/login`);
     console.log('Credentials:', credentials);
     console.log('Headers:', headers);
 
-    return this.http.post(`${this.apiUrl}/api/login`, credentials, { headers })
+    return this.http.post(`${this.apiUrl}/login`, credentials, { headers })
       .pipe(
         map((response: any) => {
           console.log('Login response received:', response);
           if (response.token) {
+            console.log('Token received:', response.token);
             localStorage.setItem(this.tokenKey, response.token);
             console.log('Token saved to localStorage');
           }

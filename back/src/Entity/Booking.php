@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\BookingRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: BookingRepository::class)]
 #[ApiResource()]
@@ -14,24 +15,30 @@ class Booking
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["booking:read"])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(["booking:read"])]
     private ?\DateTimeInterface $booking_date = null;
 
     #[ORM\Column]
+    #[Groups(["booking:read"])]
     private ?int $seat_count = null;
 
     #[ORM\ManyToOne(inversedBy: 'bookings')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(["booking:read"])]
     private ?Session $session = null;
 
     #[ORM\ManyToOne(inversedBy: 'bookings')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(["booking:read"])]
     private ?SeatType $seat_type = null;
 
     #[ORM\ManyToOne(inversedBy: 'booking')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(["booking:read"])]
     private ?User $user = null;
 
     public function getId(): ?int

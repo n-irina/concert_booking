@@ -1,3 +1,4 @@
+
 security:
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
@@ -24,7 +25,7 @@ security:
             # Pas d'authentificateur personnalisé pour l'API
             # custom_authenticator: App\Security\LoginFormAuthenticator
             json_login:
-                check_path: auth # The name in routes.yaml is enough for mapping
+                check_path: /login # The name in routes.yaml is enough for mapping
                 username_path: email
                 password_path: password
                 success_handler: lexik_jwt_authentication.handler.authentication_success

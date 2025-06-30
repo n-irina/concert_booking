@@ -1,4 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from '../environment/environment';
+import { HttpHeaders } from '@angular/common/http';
 
 export interface CartItem {
   sessionId: number;
@@ -9,26 +13,43 @@ export interface CartItem {
 
 @Injectable({ providedIn: 'root' })
 export class CartService {
-  private storageKey = 'concert_cart';
+  private cartKey = 'cart_items';
+  private apiUrl = environment.apiUrl; // doit être https://localhost:8000 ou http://localhost:8000
 
-  getCart(): CartItem[] {
-    const data = localStorage.getItem(this.storageKey);
-    return data ? JSON.parse(data) : [];
+
+  cartChanged = new EventEmitter<void>();
+
+  constructor(private http: HttpClient) {}
+
+  getCartItems(): CartItem[] {
+    const items = localStorage.getItem(this.cartKey);
+    return items ? JSON.parse(items) : [];
   }
 
   addToCart(item: CartItem): void {
-    const cart = this.getCart();
-    cart.push(item);
-    localStorage.setItem(this.storageKey, JSON.stringify(cart));
+    const items = this.getCartItems();
+    items.push(item);
+    localStorage.setItem(this.cartKey, JSON.stringify(items));
+    this.cartChanged.emit();
   }
 
   removeFromCart(index: number): void {
-    const cart = this.getCart();
-    cart.splice(index, 1);
-    localStorage.setItem(this.storageKey, JSON.stringify(cart));
+    const items = this.getCartItems();
+    items.splice(index, 1);
+    localStorage.setItem(this.cartKey, JSON.stringify(items));
+    this.cartChanged.emit();
   }
 
   clearCart(): void {
-    localStorage.removeItem(this.storageKey);
+    localStorage.removeItem(this.cartKey);
+    this.cartChanged.emit();
+  }
+
+
+  payCart(cartItems: CartItem[]): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    return this.http.post(`${this.apiUrl}/bookings/batch`, JSON.stringify({ items: cartItems }), { headers });
   }
 }

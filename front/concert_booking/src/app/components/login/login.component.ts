@@ -34,6 +34,7 @@ export class LoginComponent {
   }
 
   onSubmit(): void {
+    console.log('onSubmit called');
     if (!this.credentials.email || !this.credentials.password) {
       this.error = 'Please fill in all fields';
       return;
@@ -46,10 +47,20 @@ export class LoginComponent {
 
     this.authService.login(this.credentials).subscribe({
       next: (response: any) => {
-        console.log('Login successful:', response);
+        // Log complet de la réponse pour debug
+        console.log('=== LOGIN API RESPONSE ===');
+        console.log(response);
         this.isLoading = false;
-        // Rediriger vers la page d'origine ou la page d'accueil
-        this.router.navigate([this.redirectUrl]);
+        // Debug : afficher la structure de la réponse et des rôles
+        console.log('Login response:', response);
+        console.log('Roles:', response.user?.roles, response.roles);
+        // Rediriger selon le rôle
+        const roles = response.user?.roles || response.roles || [];
+        if (roles.includes('ROLE_ADMIN')) {
+          this.router.navigate(['/admin']);
+        } else {
+          this.router.navigate([this.redirectUrl]);
+        }
       },
       error: (err: any) => {
         console.error('Login error:', err);

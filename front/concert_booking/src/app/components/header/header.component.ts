@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { SearchBarComponent } from '../search-bar/search-bar.component';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-header',
@@ -15,8 +16,17 @@ import { CommonModule } from '@angular/common';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
+  cartCount = 0;
 
-  constructor(private router: Router){}
+  constructor(private router: Router, private cartService: CartService) {
+    this.updateCartCount();
+    window.addEventListener('storage', () => this.updateCartCount());
+    this.cartService.cartChanged.subscribe(() => this.updateCartCount());
+  }
+
+  updateCartCount() {
+    this.cartCount = this.cartService.getCartItems().length;
+  }
 
   isMenuOpen = false;
 

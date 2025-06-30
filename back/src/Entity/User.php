@@ -53,6 +53,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Groups(['post_user'])]
     private ?string $password = null;
 
     /**
