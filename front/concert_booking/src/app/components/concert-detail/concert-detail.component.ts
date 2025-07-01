@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Event_api } from '../../models/event_api.model';
-import { GetEventsService } from '../../services/get-events.service';
+import { GetSessionsService } from '../../services/get-sessions.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DatePipe, KeyValuePipe, NgFor, NgIf, UpperCasePipe } from '@angular/common';
+import { DatePipe, KeyValuePipe, NgFor, NgIf, UpperCasePipe, JsonPipe } from '@angular/common';
 import { FormatArtistsPipe } from '../../pipes/format-artists.pipe';
 import { Session } from '../../models/session.model';
 import { Category } from '../../models/category.model';
@@ -24,6 +24,7 @@ import { RouterLink } from '@angular/router';
     DatePipe,
     UpperCasePipe,
     FormatCategoriesPipe,
+    JsonPipe,
     HeaderComponent,
     FooterComponent,
     RouterLink
@@ -39,85 +40,92 @@ export class ConcertDetailComponent implements OnInit{
   event_category: Category[] = [];
 
   constructor(
-    private event_service: GetEventsService,
+    private session_service: GetSessionsService,
     private shared_service: EventSharedService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-  ){ }
+  ){
+    console.log('ConcertDetailComponent constructor called');
+  }
 
   ngOnInit(): void {
-    const id: number = +this.activatedRoute.snapshot.params["id"];
-    const selectedHall = this.activatedRoute.snapshot.params["hall"];
-
-    this.event_service.getEventById(id).subscribe(
-      (res: Event_api) => {
-        this.event = res;
-        this.grouped_sessions = this.groupSessionsByHall(this.event?.sessions);
-
-        // Si un hall est spécifié dans l'URL, ne garder que les sessions de ce hall
-        if (selectedHall && this.grouped_sessions[selectedHall]) {
-          const filteredSessions = { [selectedHall]: this.grouped_sessions[selectedHall] };
-          this.grouped_sessions = filteredSessions;
-        }
-
-        this.minimum_price = this.calculateMinPricesByHall(this.grouped_sessions);
-        this.event_category = this.getAllCategories(this.event);
-        this.shared_service.setCategories(this.event_category);
-      },
-      (error) => {
-        console.error("Error fetching future events", error);
-      }
-    );
-  }
-
-  groupSessionsByHall(sessions: Session[]) {
-    const grouped : { [hall: string]: Session[] } = {};
-
-    for (const session of sessions) {
-      if (!grouped[session.hall.name]) {
-        grouped[session.hall.name] = [];
-      }
-      grouped[session.hall.name].push(session);
-    }
-
-    return grouped;
-  }
-
-  calculateMinPricesByHall(grouped: { [hall: string]: Session[] }): { [hall: string]: number } {
-    const prices: { [hall: string]: number } = {};
-
-    for (const hall in grouped) {
-      const sessions = grouped[hall];
-      let min = Infinity;
-
-      for (const session of sessions) {
-        for (const seat of session.sessionSeatTypes || []) {
-          if (seat.price < min) {
-            min = seat.price;
+    this.activatedRoute.params.subscribe(params => {
+      const eventId = params['eventId'] || params['id']; // Support both eventId and id parameters
+      console.log('Event ID from params:', eventId);
+      if (eventId) {
+        this.session_service.getSessionsByEventId(eventId).subscribe({
+          next: (sessions: Session[]) => {
+            console.log('Sessions received:', sessions);
+            if (sessions.length > 0) {
+              this.event = sessions[0].event;
+              console.log('Event extracted:', this.event);
+              console.log('Event artists:', this.event?.artist);
+              this.groupSessionsByHall(sessions);
+              this.calculateMinimumPrices();
+              this.getEventCategories();
+            }
+          },
+          error: (error: any) => {
+            console.error('Error fetching sessions:', error);
+            this.router.navigate(['/']);
           }
-        }
+        });
+      } else {
+        this.router.navigate(['/']);
       }
-
-      prices[hall] = min === Infinity ? 0 : min;
-    }
-
-    return prices;
+    });
   }
 
+  groupSessionsByHall(sessions: Session[]): void {
+    this.grouped_sessions = {};
 
-  getAllCategories(event: Event_api): Category[] {
-    return event.artist.flatMap(a => a.category);
+    sessions.forEach(session => {
+      const hallName = session.hall.name;
+      if (!this.grouped_sessions[hallName]) {
+        this.grouped_sessions[hallName] = [];
+      }
+      this.grouped_sessions[hallName].push(session);
+    });
   }
 
-  goToDetails(hall: string, eventId: string): void {
-    // Trouver les sessions pour ce hall et cet événement
-    const sessions = this.grouped_sessions[hall];
-    if (sessions && sessions.length > 0) {
-      // On redirige toujours vers la première session, qui affichera toutes les dates disponibles
-      this.router.navigate(['/events', eventId, '/sessions']);
+  calculateMinimumPrices(): void {
+    this.minimum_price = {};
+
+    Object.keys(this.grouped_sessions).forEach(hallName => {
+      let minPrice = Infinity;
+      this.grouped_sessions[hallName].forEach(session => {
+        session.sessionSeatTypes.forEach(seatType => {
+          if (seatType.price < minPrice) {
+            minPrice = seatType.price;
+          }
+        });
+      });
+      this.minimum_price[hallName] = minPrice === Infinity ? 0 : minPrice;
+    });
+  }
+
+  getEventCategories(): void {
+    if (this.event && this.event.artist && this.event.artist.length > 0) {
+      console.log('Event artists:', this.event.artist);
+      const categories = this.event.artist.flatMap(artist => artist.category || []);
+      console.log('Extracted categories:', categories);
+      this.event_category = categories;
+      console.log('Final event_category:', this.event_category);
     } else {
-      console.error('No session found for this hall and event');
-      this.router.navigate(['/']);
+      console.log('No event or artists found');
+    }
+  }
+
+  goToDetails(hallName: string, eventId: string): void {
+    // If a hall is specified in the URL, keep only sessions from this hall
+    const hallSessions = this.grouped_sessions[hallName];
+    if (hallSessions && hallSessions.length > 0) {
+      // Find sessions for this hall and this event
+      const firstSession = hallSessions[0];
+      // Always redirect to the first session, which will display all available dates
+      this.router.navigate(['/events', eventId, 'sessions'], {
+        queryParams: { hallId: firstSession.hall.id }
+      });
     }
   }
 

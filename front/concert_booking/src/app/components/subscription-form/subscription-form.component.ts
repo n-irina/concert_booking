@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { SubscriptionService } from '../../services/subscription.service';
+import { SubscriptionService} from '../../services/subscription.service';
 import { PostUser } from '../../models/post_user.model';
 
 @Component({
@@ -16,19 +16,18 @@ export class SubscriptionFormComponent implements OnInit {
   email: string = '';
   password: string = '';
   confirmPassword: string = '';
-  passwordError: string = '';
-  confirmPasswordError: string = '';
   isLoading: boolean = false;
   error: string = '';
+  passwordError: string = '';
+  confirmPasswordError: string = '';
 
   constructor(
-    private router: Router,
-    private subscriptionService: SubscriptionService
+    private subscriptionService: SubscriptionService,
+    private router: Router
   ) {}
 
-  ngOnInit() {
-    // Récupère l'email temporaire s'il existe (pour la landing page)
-    // Sinon, laisse le champ vide pour saisie manuelle (pour le header)
+  ngOnInit(): void {
+    // Get temporary email if it exists (for landing page)
     const tempEmail = this.subscriptionService.getTempEmail();
     if (tempEmail) {
       this.email = tempEmail;
@@ -39,6 +38,11 @@ export class SubscriptionFormComponent implements OnInit {
     return !!this.subscriptionService.getTempEmail();
   }
 
+  validateEmail(): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(this.email);
+  }
+  //Validate password format and match
   validatePassword() {
     this.passwordError = '';
     this.confirmPasswordError = '';
@@ -69,11 +73,6 @@ export class SubscriptionFormComponent implements OnInit {
     }
 
     return true;
-  }
-
-  validateEmail(): boolean {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(this.email);
   }
 
   isFormValid(): boolean {
@@ -120,10 +119,7 @@ export class SubscriptionFormComponent implements OnInit {
     });
   }
 
-  cancel() {
-    if (this.hasTempEmail()) {
-      this.subscriptionService.clearTempEmail();
-    }
+  cancel(): void {
     this.router.navigate(['/']);
   }
 }

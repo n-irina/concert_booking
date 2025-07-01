@@ -14,37 +14,55 @@ export interface CartItem {
 @Injectable({ providedIn: 'root' })
 export class CartService {
   private cartKey = 'cart_items';
-  private apiUrl = environment.apiUrl; // doit être https://localhost:8000 ou http://localhost:8000
-
+  private cartItems: CartItem[] = [];
+  private apiUrl = environment.apiUrl; // must be https://localhost:8000 or http://localhost:8000
 
   cartChanged = new EventEmitter<void>();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.loadCartFromStorage();
+  }
+
+  private loadCartFromStorage(): void {
+    const storedCart = localStorage.getItem(this.cartKey);
+    if (storedCart) {
+      this.cartItems = JSON.parse(storedCart);
+    }
+  }
+
+  private saveCartToStorage(): void {
+    localStorage.setItem(this.cartKey, JSON.stringify(this.cartItems));
+  }
 
   getCartItems(): CartItem[] {
-    const items = localStorage.getItem(this.cartKey);
-    return items ? JSON.parse(items) : [];
+    return this.cartItems;
   }
 
   addToCart(item: CartItem): void {
-    const items = this.getCartItems();
-    items.push(item);
-    localStorage.setItem(this.cartKey, JSON.stringify(items));
+    this.cartItems.push(item);
+    this.saveCartToStorage();
     this.cartChanged.emit();
   }
 
   removeFromCart(index: number): void {
-    const items = this.getCartItems();
-    items.splice(index, 1);
-    localStorage.setItem(this.cartKey, JSON.stringify(items));
+    this.cartItems.splice(index, 1);
+    this.saveCartToStorage();
     this.cartChanged.emit();
   }
 
   clearCart(): void {
-    localStorage.removeItem(this.cartKey);
+    this.cartItems = [];
+    this.saveCartToStorage();
     this.cartChanged.emit();
   }
 
+  getTotal(): number {
+    return this.cartItems.reduce((total: number, item: CartItem) => total + (item.price * item.quantity), 0);
+  }
+
+  getCartUpdated(): EventEmitter<void> {
+    return this.cartChanged;
+  }
 
   payCart(cartItems: CartItem[]): Observable<any> {
     const headers = new HttpHeaders({

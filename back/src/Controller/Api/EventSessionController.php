@@ -8,6 +8,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use App\Repository\SessionRepository;
 
 class EventSessionController extends AbstractController
 {
@@ -22,7 +25,22 @@ class EventSessionController extends AbstractController
 
         $sessions = $em->getRepository(Session::class)->findBy(['event' => $event]);
 
-        // Utilise le groupe de sérialisation "session_read" si tu veux filtrer les champs
+        // Use "session_read" serialization group if you want to filter fields
         return $this->json($sessions, 200, [], ['groups' => ['session_read']]);
+    }
+
+    #[Route('/api/events/{eventId}/sessions', name: 'api_event_sessions', methods: ['GET'])]
+    public function getEventSessions(
+        int $eventId,
+        Request $request,
+        SessionRepository $sessionRepository,
+        SerializerInterface $serializer
+    ): JsonResponse {
+        $sessions = $sessionRepository->findBy(['event' => $eventId]);
+        
+        // Use "session_read" serialization group if you want to filter fields
+        $data = $serializer->serialize($sessions, 'json', ['groups' => ['session_read']]);
+        
+        return new JsonResponse(json_decode($data, true));
     }
 } 

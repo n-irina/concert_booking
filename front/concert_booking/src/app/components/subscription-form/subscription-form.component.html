@@ -6,10 +6,10 @@
       <div class="form-group">
         <label for="email">Email</label>
         @if (hasTempEmail()) {
-          <!-- Affichage en lecture seule si email pré-rempli -->
+          <!-- Read-only display if email is pre-filled -->
           <p class="email-display">Email: {{ email }}</p>
         } @else {
-          <!-- Champ de saisie si pas d'email pré-rempli -->
+          <!-- Input field if no email is pre-filled -->
           <input
             type="email"
             id="email"

@@ -62,7 +62,7 @@ class EventCrudController extends AbstractCrudController
                     'by_reference' => false,
                 ])
                 ->onlyOnForms(),
-            // Champs pour la vue détaillée
+            // Fields for detailed view
             AssociationField::new('artist', 'Artists')
                 ->onlyOnDetail()
                 ->setTemplatePath('admin/event/artists.html.twig'),

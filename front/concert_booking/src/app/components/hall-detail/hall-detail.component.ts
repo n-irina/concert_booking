@@ -1,3 +1,4 @@
+
 import { Component } from '@angular/core';
 import { Hall } from '../../models/hall.model';
 import { Event_api } from '../../models/event_api.model';
@@ -99,4 +100,3 @@ export class HallDetailComponent {
     );
   }
 }
-

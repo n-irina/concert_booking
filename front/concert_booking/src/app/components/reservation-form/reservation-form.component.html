@@ -1,7 +1,7 @@
 <div class="reservation-form" *ngIf="sessions.length">
   <h4 class="reservation-title">Select a time on</h4>
 
-  <!-- Choix de la session avec menu déroulant stylisé Bootstrap -->
+  <!-- Session choice with styled Bootstrap dropdown -->
   <div class="form-group">
     <label for="sessionSelect" class="form-label">Choose your session:</label>
     <select
@@ -19,7 +19,7 @@
     </div>
   </div>
 
-  <!-- Choix du seat type avec checkbox stylisées -->
+  <!-- Seat type choice with styled checkboxes -->
   <div class="seat-types" *ngIf="selectedSession?.sessionSeatTypes?.length && selectedSession">
     <h5 class="seat-types-title">Select your seats:</h5>
 
@@ -29,7 +29,7 @@
              [ngClass]="{'border-primary': isSeatTypeSelected(i)}">
           <div class="card-body">
             <div class="row align-items-center">
-              <!-- Checkbox stylisée -->
+              <!-- Styled checkbox -->
               <div class="col-auto">
                 <div class="form-check">
                   <input
@@ -46,7 +46,7 @@
                 </div>
               </div>
 
-              <!-- Description et prix -->
+              <!-- Description and price -->
               <div class="col">
                 <div class="seat-info">
                   <p class="seat-description mb-1">{{ seat.seat_type.description }}</p>
@@ -54,7 +54,7 @@
                 </div>
               </div>
 
-              <!-- Sélection du nombre de places -->
+              <!-- Number of seats selection -->
               <div class="col-auto">
                 <select
                   class="form-select quantity-select"
@@ -66,7 +66,7 @@
               </div>
             </div>
 
-            <!-- Résumé par type de siège -->
+            <!-- Summary by seat type -->
             <div class="seat-summary mt-2"
                  *ngIf="isSeatTypeSelected(i) && seatQuantities[i] > 0">
               <div class="alert alert-info mb-0">
@@ -80,7 +80,7 @@
       </div>
     </div>
 
-    <!-- Résumé total -->
+    <!-- Total summary -->
     <div class="total-summary mt-4" *ngIf="totalAmount > 0">
       <div class="card border-success">
         <div class="card-header bg-success text-white">
@@ -99,7 +99,7 @@
     </div>
   </div>
 
-  <!-- Bouton de confirmation -->
+  <!-- Confirmation button -->
   <div class="d-grid gap-2 mt-4">
     <button
       class="btn btn-primary btn-lg"

@@ -21,8 +21,10 @@ class SearchController extends AbstractController
         CategoryRepository $categoryRepository,
         HallRepository $hallRepository,
     ): JsonResponse {
+         // Retrieve the search query (?q=...)
         $query = $request->query->get('q', '');
 
+        // Return empty results if the query is blank
         if (empty($query)) {
             return $this->json([
                 'events' => [],
@@ -32,7 +34,7 @@ class SearchController extends AbstractController
             ]);
         }
 
-        // Recherche partielle insensible à la casse
+        // Perform a case-insensitive search on each entity's relevant field
         $events = $eventRepository->createQueryBuilder('e')
             ->where('LOWER(e.name) LIKE :q')
             ->setParameter('q', '%' . strtolower($query) . '%')
@@ -61,7 +63,7 @@ class SearchController extends AbstractController
             ->getQuery()
             ->getResult();
 
-        // Normalisation (ou transformer manuellement selon ton besoin)
+        // Format the results to return minimal useful data
         $data = [
             'events' => array_map(fn($e) => [
                 'id' => $e->getId(),

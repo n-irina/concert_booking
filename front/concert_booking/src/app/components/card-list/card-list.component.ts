@@ -34,7 +34,7 @@ export class CardListComponent {
     if (this.type === 'artist') {
       this.router.navigate(['/artist', id]);
     } else if (this.type === 'event') {
-      this.router.navigate(['/events', id, 'sessions']);
+      this.router.navigate(['/concert', id]);
     }
     else {
       this.router.navigate(['/hall', id]);

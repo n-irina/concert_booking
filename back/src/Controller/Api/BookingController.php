@@ -29,6 +29,7 @@ class BookingController extends AbstractController
             return new JsonResponse(['error' => 'Invalid data'], 400);
         }
         $createdBookings = [];
+        
         foreach ($data['items'] as $item) {
             $session = $em->getRepository(Session::class)->find($item['sessionId']);
             $seatType = $em->getRepository(SeatType::class)->findOneBy(['name' => $item['seatTypeName']]);

@@ -20,26 +20,25 @@ final class HallEventSessionsFilter extends AbstractFilter
         parent::__construct($managerRegistry, $logger, $properties, $nameConverter);
     }
 
-    protected function filterProperty(string $property, mixed $value, QueryBuilder $queryBuilder,
-        QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass,
-        ?Operation $operation = null, array $context = []): void
+    protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, Operation $operation = null, array $context = []): void
     {
-        $alias = $queryBuilder->getRootAliases()[0];
-        if ($property === 'hall') {
-            $queryBuilder
-                ->innerJoin(sprintf('%s.hall', $alias), 'hall')
-                ->andWhere('hall.id = :hallId')
-                ->setParameter('hallId', $value);
+        if ($property !== 'hall' && $property !== 'eventId') {
             return;
         }
-    
-        // Filtrer par ID d’événement
-        if ($property === 'event') {
+
+        $parameterName = $queryNameGenerator->generateParameterName($property);
+        
+        if ($property === 'hall') {
             $queryBuilder
-                ->innerJoin(sprintf('%s.event', $alias), 'event')
-                ->andWhere('event.id = :eventId')
-                ->setParameter('eventId', $value);
-            return;
+                ->andWhere(sprintf('o.hall = :%s', $parameterName))
+                ->setParameter($parameterName, $value);
+        }
+        
+        if ($property === 'eventId') {
+            // Filter by event ID
+            $queryBuilder
+                ->andWhere(sprintf('o.event = :%s', $parameterName))
+                ->setParameter($parameterName, $value);
         }
     }
 
@@ -47,16 +46,16 @@ final class HallEventSessionsFilter extends AbstractFilter
     {
         return [
             'hall' => [
-                'property' => null,
-                'type' => 'integer',
+                'property' => 'hall',
+                'type' => 'string',
                 'required' => false,
-                'swagger' => ['description' => 'Filter sessions by hall Id'],
+                'description' => 'Filter sessions by hall ID',
             ],
-            'event' => [
-                'property' => null,
-                'type' => 'integer',
+            'eventId' => [
+                'property' => 'eventId',
+                'type' => 'string',
                 'required' => false,
-                'swagger' => ['description' => 'Filter sessions by event ID'],
+                'description' => 'Filter sessions by event ID',
             ],
         ];
     }

@@ -12,10 +12,12 @@ export class FormatCategoriesPipe implements PipeTransform {
       return '';
     }
 
-    // Dédoublonner par nom
-    const unique = Array.from(new Map(categories.map(c => [c.name, c])).values());
+    // Remove duplicates by name
+    const uniqueCategories = categories.filter((category, index, self) =>
+      index === self.findIndex(c => c.name === category.name)
+    );
 
-    return unique.map(c => c.name).join(' - ');
+    return uniqueCategories.map(category => category.name).join(', ');
   }
 
 }

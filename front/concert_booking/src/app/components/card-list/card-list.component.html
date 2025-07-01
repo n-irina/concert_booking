@@ -25,19 +25,9 @@
           <h4 class="no-events" *ngIf="type === 'artist' && (!item.events || item.events.length === 0)">
             No upcoming events for this artist.
           </h4>
-          <h4 class="event-category" *ngIf="type === 'event'">
+          <h4 class="event-category" *ngIf="type === 'artist'">
             Artist(s): {{ item.artist | formatArtists }}
           </h4>
-
-          <div *ngIf="type === 'event'">
-            <span>eventId: {{ item.id }}</span>
-            <a *ngIf="hallId" [routerLink]="['/hall', hallId, 'event', item.id, 'sessions']" class="btn btn-primary">
-              Voir les sessions
-            </a>
-            <a *ngIf="!hallId" [routerLink]="['/events', item.id, 'sessions']" class="btn btn-primary">
-              Voir les sessions
-            </a>
-          </div>
         </div>
       </div>
     </div>

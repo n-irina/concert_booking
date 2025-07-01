@@ -30,4 +30,10 @@ export class GetSessionsService {
   getSessionsByEventId(eventId: number) {
     return this.http.get<Session[]>(`${this.API_URL}/events/${eventId}/sessions`);
   }
+
+  getSessionsByHallId(hallId: string): Observable<Session[]> {
+    const url = `${this.API_URL}/sessions?hall=${hallId}`;
+    console.log("Requesting sessions by hall ID from:", url);
+    return this.http.get<Session[]>(url);
+  }
 }

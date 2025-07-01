@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[AsController]
 class MeAction extends AbstractController
 {
-    // Méthode pour obtenir les informations de l'utilisateur
+    // Method to get user information
     #[Route('/api/me', name: 'api_me', methods: ['GET'])]
     public function __invoke(): ?User
     {

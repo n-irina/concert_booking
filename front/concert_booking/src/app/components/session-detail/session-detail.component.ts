@@ -61,10 +61,10 @@ export class SessionDetailComponent implements OnInit{
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
-      const eventId = params['eventId'];
+      const concertId = params['id'] || params['eventId'];
       const hallId = params['hallId'];
-      if (eventId) {
-        this.session_service.getSessionsByEventId(eventId).subscribe(
+      if (concertId) {
+        this.session_service.getSessionsByEventId(concertId).subscribe(
           (sessions: Session[]) => {
             if (hallId) {
               this.session = sessions.filter(s => String(s.hall.id) === String(hallId));
@@ -74,7 +74,7 @@ export class SessionDetailComponent implements OnInit{
             this.event = this.session[0]?.event;
             this.hall = this.session[0]?.hall;
             this.hallName = this.hall?.name || null;
-            this.categories = this.shared_service.getCategories();
+            this.categories = this.getAllCategoriesFromEvent(this.event);
             this.minimum_price = this.getMinimumPrice(this.session);
             if (this.event) {
               this.safeDescription = this.sanitizer.bypassSecurityTrustHtml(this.event.description);
@@ -129,5 +129,11 @@ export class SessionDetailComponent implements OnInit{
 
   handleReservation(reservation: { sessionId: number, seatTypeId: number, quantity: number }) {
     console.log('Reservation done:', reservation);
+  }
+
+  getAllCategoriesFromEvent(event?: Event_api): Category[] {
+    return Array.isArray(event?.artist)
+      ? event.artist.flatMap(a => Array.isArray(a.category) ? a.category : [])
+      : [];
   }
 }

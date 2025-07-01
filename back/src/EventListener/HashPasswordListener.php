@@ -7,38 +7,51 @@ namespace App\EventListener;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Events;
+use Doctrine\ORM\Event\PrePersistEventArgs;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-#[AsEntityListener(Events::prePersist, method: 'onPrePersist', entity: User::class)]
-#[AsEntityListener(Events::preUpdate, method: 'hashPassword', entity: User::class)]
+#[AsEntityListener(Events::prePersist, method: 'prePersist', entity: User::class)]
+#[AsEntityListener(Events::preUpdate, method: 'preUpdate', entity: User::class)]
 class HashPasswordListener
 {
-    public function __construct(private UserPasswordHasherInterface $userPasswordHasher)
-    {
-    }
+    public function __construct(
+        private UserPasswordHasherInterface $passwordHasher
+    ) {}
 
-    public function onPrePersist(User $user): void
+    public function prePersist(PrePersistEventArgs $args): void
     {
-        // Ajouter le rôle ROLE_USER si aucun rôle n'est défini
-        if (empty($user->getRoles())) {
-            $user->setRoles(['ROLE_USER']);
-        }
+        $entity = $args->getObject();
 
-        // Hacher le mot de passe si nécessaire
-        $this->hashPassword($user);
-    }
-
-    public function hashPassword(User $user): void
-    {
-        // Only hash if plain_password is set and password is not already hashed
-        if (!$user->getPlainPassword() || $user->getPassword()) {
+        if (!$entity instanceof User) {
             return;
         }
-        
-        $hashedPassword = $this->userPasswordHasher->hashPassword(
-            $user,
-            $user->getPlainPassword()
-        );
-        $user->setPassword($hashedPassword);
+
+        // Add ROLE_USER role if no role is defined
+        if (empty($entity->getRoles())) {
+            $entity->setRoles(['ROLE_USER']);
+        }
+
+        // Hash password if necessary
+        if ($entity->getPlainPassword()) {
+            $hashedPassword = $this->passwordHasher->hashPassword($entity, $entity->getPlainPassword());
+            $entity->setPassword($hashedPassword);
+            $entity->eraseCredentials();
+        }
+    }
+
+    public function preUpdate(PreUpdateEventArgs $args): void
+    {
+        $entity = $args->getObject();
+
+        if (!$entity instanceof User) {
+            return;
+        }
+
+        if ($entity->getPlainPassword()) {
+            $hashedPassword = $this->passwordHasher->hashPassword($entity, $entity->getPlainPassword());
+            $entity->setPassword($hashedPassword);
+            $entity->eraseCredentials();
+        }
     }
 }

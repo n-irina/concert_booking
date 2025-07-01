@@ -46,7 +46,7 @@ class SessionSeatTypeFixtures extends Fixture implements DependentFixtureInterfa
                 ["seat_type" => "Rear row", "price" => 90.00, "available_seats" => 5000],
                 ["seat_type" => "Floor", "price" => 75.00, "available_seats" => 8000],
             ],
-            // Champagne & Roses Tour - Zénith
+            // Champagne & Roses Tour - Zenith
             "Champagne & Roses Tour - Le Zénith de Paris 1" => [
                 ["seat_type" => "Gold square", "price" => 120.00, "available_seats" => 1500],
                 ["seat_type" => "Rear row", "price" => 100.00, "available_seats" => 3000],
@@ -70,14 +70,14 @@ class SessionSeatTypeFixtures extends Fixture implements DependentFixtureInterfa
                 ["seat_type" => "Front row", "price" => 150.00, "available_seats" => 1300],
             ],
         
-            // Exclusive Tour - Le Zénith de Paris
+            // Exclusive Tour - Le Zenith de Paris
             "Exclusive Tour - Le Zénith de Paris 1" => [
                 ["seat_type" => "Gold square", "price" => 130.00, "available_seats" => 1500],
                 ["seat_type" => "Rear row", "price" => 90.00, "available_seats" => 3000],
                 ["seat_type" => "Floor", "price" => 70.00, "available_seats" => 1800],
             ],
 
-            // Ronisia - Le Zénith de Paris
+            // Ronisia - Le Zenith de Paris
             "Ronisia - Le Zénith de Paris 1" => [
                 ["seat_type" => "Gold square", "price" => 90.00, "available_seats" => 1500],
                 ["seat_type" => "Rear row", "price" => 70.00, "available_seats" => 3000],
@@ -99,7 +99,7 @@ class SessionSeatTypeFixtures extends Fixture implements DependentFixtureInterfa
                 ["seat_type" => "Rear row", "price" => 100.00, "available_seats" => 5000],
                 ["seat_type" => "Floor", "price" => 90.00, "available_seats" => 8000],
             ],
-            // The Mathematics Tour - Zénith
+            // The Mathematics Tour - Zenith
             "The Mathematics Tour - Le Zénith de Paris 1" => [
                 ["seat_type" => "Gold square", "price" => 150.00, "available_seats" => 1500],
                 ["seat_type" => "Rear row", "price" => 130.00, "available_seats" => 3000],
@@ -119,7 +119,7 @@ class SessionSeatTypeFixtures extends Fixture implements DependentFixtureInterfa
                 ["seat_type" => "Rear row", "price" => 100.00, "available_seats" => 5000],
                 ["seat_type" => "Floor", "price" => 90.00, "available_seats" => 8000],
             ],
-            // Anti World Tour - Zénith
+            // Anti World Tour - Zenith
             "Anti World Tour - Le Zénith de Paris 1" => [
                 ["seat_type" => "Gold square", "price" => 180.00, "available_seats" => 1500],
                 ["seat_type" => "Rear row", "price" => 160.00, "available_seats" => 3000],

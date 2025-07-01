@@ -4,15 +4,6 @@ controllers:
         namespace: App\Controller
     type: attribute
 
-# Route pour l'authentification JWT
-auth:
-    path: /api/login
-    methods: [POST]
-
-admin_dashboard:
-    path: /admin
-    controller: App\Controller\AdminController::index
-
 app_home:
     path: /
     controller: App\Controller\HomeController::index

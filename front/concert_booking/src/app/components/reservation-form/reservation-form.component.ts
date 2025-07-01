@@ -27,7 +27,7 @@ export class ReservationFormComponent {
   @Output() reservationConfirmed = new EventEmitter<any>();
 
   selectedSession: Session | null = null;
-  seatTypeSelections: { [seatTypeId: number]: boolean } = {}; // Booléen pour chaque type de siège
+  seatTypeSelections: { [seatTypeId: number]: boolean } = {}; // Boolean for each seat type
   seatQuantities: { [seatTypeId: number]: number } = {};
   totalAmount: number = 0;
 
@@ -50,7 +50,7 @@ export class ReservationFormComponent {
 
   onSelectSession(sessionId: number): void {
     this.selectedSession = this.sessions.find(s => s.id === +sessionId) || null;
-    this.seatTypeSelections = {}; // Réinitialiser les sélections
+    this.seatTypeSelections = {}; // Reset selections
     this.initializeQuantities();
     this.updateTotal();
   }
@@ -59,7 +59,7 @@ export class ReservationFormComponent {
     if (this.selectedSession) {
       this.seatQuantities = {};
       this.seatTypeSelections = {};
-      // Initialiser toutes les quantités à 0 et sélections à false
+      // Initialize all quantities to 0 and selections to false
       this.selectedSession.sessionSeatTypes.forEach(seat => {
         this.seatQuantities[seat.seat_type.id] = 0;
         this.seatTypeSelections[seat.seat_type.id] = false;
@@ -69,11 +69,11 @@ export class ReservationFormComponent {
   }
 
   onSeatTypeChange(i: number): void {
-    // Si la case est décochée, remettre la quantité à 0
+    // If checkbox is unchecked, reset quantity to 0
     if (!this.seatTypeSelections[i]) {
       this.seatQuantities[i] = 0;
     } else {
-      // Si cochée, mettre la quantité à 1 si elle était à 0
+      // If checked, set quantity to 1 if it was 0
       if (this.seatQuantities[i] === 0) {
         this.seatQuantities[i] = 1;
       }
@@ -87,22 +87,23 @@ export class ReservationFormComponent {
     return isSelected;
   }
 
+  // Update seat quantity and toggle selection
   updateQuantity(seatTypeId: number, quantity: number): void {
     console.log(`updateQuantity called for seat type ${seatTypeId} with quantity ${quantity}`);
     console.log('Current seatTypeSelections:', this.seatTypeSelections);
     console.log('Current seatQuantities:', this.seatQuantities);
 
-    // Si la quantité est 0, décocher la checkbox
+    // If quantity is 0, uncheck the checkbox
     if (quantity === 0) {
       this.seatTypeSelections[seatTypeId] = false;
       console.log(`Set seat type ${seatTypeId} to unselected because quantity is 0`);
     }
 
-    // Mettre à jour la quantité (déjà fait par ngModel)
+    // Update quantity (already done by ngModel)
     this.seatQuantities[seatTypeId] = quantity;
     console.log(`Updated seatQuantities[${seatTypeId}] to ${quantity}`);
 
-    // Recalculer le total
+    // Recalculate total
     this.updateTotal();
   }
 
@@ -118,8 +119,9 @@ export class ReservationFormComponent {
     }
   }
 
+  // Confirm reservation and add to cart
   confirmReservation(): void {
-    console.log('Bouton confirmReservation cliqué');
+    console.log('Confirm reservation button clicked');
     if (this.selectedSession) {
       this.selectedSession.sessionSeatTypes.forEach((seat, i) => {
         const quantity = this.seatQuantities[i];
@@ -133,8 +135,8 @@ export class ReservationFormComponent {
           this.cartService.addToCart(item);
         }
       });
-      // Optionnel : afficher un message ou rediriger vers le panier
-      alert('Réservation ajoutée au panier !');
+      // Optional: display message or redirect to cart
+      alert('Reservation added to cart!');
     }
   }
 }

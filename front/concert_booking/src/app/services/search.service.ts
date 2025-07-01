@@ -9,6 +9,7 @@ export class SearchService {
 
   constructor(private http: HttpClient) { }
 
+  // Map each type of result into a unified structure with type labels
   search(query: string) {
     return this.http.get<any>('https://localhost:8000/api/search?q=' + query).pipe(
       map(res => [

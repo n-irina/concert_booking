@@ -52,8 +52,8 @@ class SessionFixtures extends Fixture implements DependentFixtureInterface
             $session->setEvent($event);
             $session->setHall($hall);
 
-            // Date dynamique : aujourd'hui + $i jours à 20h
-            $date = (new \DateTime())->modify('+' . ($i + 1) . ' days')->setTime(20, 0, 0);
+            // Dynamic date: today + $i days at 8pm
+            $date = (new \DateTime())->modify("+{$i} days")->setTime(20, 0, 0);
             $session->setDateTime($date);
 
             $manager->persist($session);

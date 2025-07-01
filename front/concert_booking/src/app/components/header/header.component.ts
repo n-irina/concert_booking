@@ -16,17 +16,20 @@ import { CartService } from '../../services/cart.service';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
-  cartCount = 0;
+  cartItemCount: number = 0;
 
+  
   constructor(private router: Router, private cartService: CartService) {
     this.updateCartCount();
-    window.addEventListener('storage', () => this.updateCartCount());
-    this.cartService.cartChanged.subscribe(() => this.updateCartCount());
+    this.cartService.getCartUpdated().subscribe(() => {
+      this.updateCartCount();
+    });
   }
 
-  updateCartCount() {
-    this.cartCount = this.cartService.getCartItems().length;
+  updateCartCount(): void {
+    this.cartItemCount = this.cartService.getCartItems().length;
   }
+
 
   isMenuOpen = false;
 
@@ -34,12 +37,12 @@ export class HeaderComponent {
     this.isMenuOpen = !this.isMenuOpen;
   }
 
-  goToSubscriptionForm() {
-    this.router.navigate(['subscription-form']);
+  goToSubscriptionForm(): void {
+    this.router.navigate(['/subscription-form']);
   }
 
-  onSearch(query: string) {
-    console.log('Recherche :', query);
-    // → Appel à ton service / filtre local / route, etc.
+  onSearch(searchTerm: string): void {
+    // → Call your service / local filter / route, etc.
+    console.log('Search term:', searchTerm);
   }
 }

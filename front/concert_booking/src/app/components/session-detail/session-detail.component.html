@@ -40,7 +40,7 @@
     <div class="session-venue-img">
       <img [src]="'https://localhost:8000/media/' + hall.picture_path" alt="hall image">
 
-      <!-- Section de sélection de session améliorée -->
+      <!-- Enhanced session selection section -->
       <div class="session-selection-container" *ngIf="session.length > 1">
         <div class="session-selection-card">
           <h5 class="session-selection-title">
@@ -73,7 +73,7 @@
               (click)="showReservation()"
               [disabled]="!selectedSessionId">
         <i class="bi bi-ticket-perforated me-2"></i>
-        Réserver
+        Reserve
       </button>
     </div>
     <div class="reservation-info" *ngIf="showResa">

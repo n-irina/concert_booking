@@ -18,19 +18,21 @@ export class SearchBarComponent {
   suggestions: { id: number; label: string; type: 'event' | 'artist' | 'category' | 'hall' }[] = [];
   suggestionsVisible = false;
 
+  // Subject to emit search input with debounce
   private searchSubject = new Subject<string>();
 
   @Output() search = new EventEmitter<string>();
   @ViewChild('container') containerRef!: ElementRef;
 
+  // Subscribe to the subject, apply debounce and distinct check, then perform the API call
   constructor(private searchService: SearchService, private router: Router) {
     this.searchSubject.pipe(
-      debounceTime(300),
-      distinctUntilChanged(),
-      switchMap(query => this.searchService.search(query))
+      debounceTime(300),// Wait 300ms between keystrokes
+      distinctUntilChanged(),// Ignore repeated inputs
+      switchMap(query => this.searchService.search(query))// Cancel previous search if new one comes
     ).subscribe(results => {
       console.log("reusltat", results);
-      this.suggestions = results;
+      this.suggestions = results;// Update suggestion list
       this.suggestionsVisible = true;
     });
   }
@@ -43,6 +45,7 @@ export class SearchBarComponent {
     }
   }
 
+  // Called when the user types in the input field
   onTyping(event: Event) {
     const input = event.target as HTMLInputElement;
     this.searchText = input.value;
