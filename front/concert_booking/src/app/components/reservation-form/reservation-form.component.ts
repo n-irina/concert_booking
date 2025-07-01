@@ -15,7 +15,6 @@ import { Router } from '@angular/router';
     NgFor,
     NgClass,
     DatePipe,
-    JsonPipe,
   ],
   templateUrl: './reservation-form.component.html',
   styleUrl: './reservation-form.component.scss'

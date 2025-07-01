@@ -15,7 +15,7 @@ export interface CartItem {
 export class CartService {
   private cartKey = 'cart_items';
   private cartItems: CartItem[] = [];
-  private apiUrl = environment.apiUrl; // must be https://localhost:8000 or http://localhost:8000
+  private apiUrl = environment.apiUrl; 
 
   cartChanged = new EventEmitter<void>();
 
