@@ -7,8 +7,6 @@ namespace App\EventListener;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Events;
-use Doctrine\ORM\Event\PrePersistEventArgs;
-use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[AsEntityListener(Events::prePersist, method: 'prePersist', entity: User::class)]
@@ -19,39 +17,26 @@ class HashPasswordListener
         private UserPasswordHasherInterface $passwordHasher
     ) {}
 
-    public function prePersist(PrePersistEventArgs $args): void
+    // 👇 ici, on reçoit l'entité directement
+    public function prePersist(User $user): void
     {
-        $entity = $args->getObject();
-
-        if (!$entity instanceof User) {
-            return;
+        if (empty($user->getRoles())) {
+            $user->setRoles(['ROLE_USER']);
         }
 
-        // Add ROLE_USER role if no role is defined
-        if (empty($entity->getRoles())) {
-            $entity->setRoles(['ROLE_USER']);
-        }
-
-        // Hash password if necessary
-        if ($entity->getPlainPassword()) {
-            $hashedPassword = $this->passwordHasher->hashPassword($entity, $entity->getPlainPassword());
-            $entity->setPassword($hashedPassword);
-            $entity->eraseCredentials();
+        if ($user->getPlainPassword()) {
+            $hashedPassword = $this->passwordHasher->hashPassword($user, $user->getPlainPassword());
+            $user->setPassword($hashedPassword);
+            $user->eraseCredentials();
         }
     }
 
-    public function preUpdate(PreUpdateEventArgs $args): void
+    public function preUpdate(User $user): void
     {
-        $entity = $args->getObject();
-
-        if (!$entity instanceof User) {
-            return;
-        }
-
-        if ($entity->getPlainPassword()) {
-            $hashedPassword = $this->passwordHasher->hashPassword($entity, $entity->getPlainPassword());
-            $entity->setPassword($hashedPassword);
-            $entity->eraseCredentials();
+        if ($user->getPlainPassword()) {
+            $hashedPassword = $this->passwordHasher->hashPassword($user, $user->getPlainPassword());
+            $user->setPassword($hashedPassword);
+            $user->eraseCredentials();
         }
     }
 }

@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  # Base de données MySQL
+  database:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: concert_booking
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: app
+      MYSQL_PASSWORD: password
+    ports:
+      - "3307:3306"
+    volumes:
+      - database_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+  # phpMyAdmin pour administrer MySQL
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    environment:
+      PMA_HOST: database
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "8080:80"
+    depends_on:
+      - database
+
+  # Application Symfony
+  symfony:
+    build:
+      context: ./back
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: "mysql://app:password@database:3306/concert_booking?serverVersion=8.0&charset=utf8mb4"
+      APP_ENV: dev
+      APP_SECRET: your_secret_here
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./back:/var/www/html
+      - /var/www/html/var/cache
+      - /var/www/html/var/log
+    depends_on:
+      database:
+        condition: service_healthy
+
+  # Application Angular
+  angular:
+    build:
+      context: ./front/concert_booking
+      dockerfile: Dockerfile
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./front/concert_booking:/app
+      - /app/node_modules
+    depends_on:
+      - symfony
+
+volumes:
+  database_data: 
